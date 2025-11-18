@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Official Admin Dashboard</title>
+<link rel="stylesheet" href="style.css">
+<style>
+  /* Dashboard Layout */
+  main { display: flex; flex-wrap: wrap; gap: 20px; padding: 20px; }
+  .card {
+    background: #fff;
+    border-left: 6px solid maroon;
+    padding: 20px;
+    flex: 1 1 300px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    border-radius: 10px;
+    transition: transform 0.2s;
+  }
+  .card:hover { transform: scale(1.03); }
+  .card h3 { color: maroon; margin-bottom: 10px; }
+
+  /* Make cards clickable */
+  a.card {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+  }
+
+  /* User Management Form */
+  #userForm { display: flex; flex-direction: column; gap: 10px; }
+  #userForm input, #userForm select, #userForm button {
+    padding: 8px; border-radius: 5px; border: 1px solid #ccc;
+  }
+  #userForm button {
+    background: maroon; color: white; border: none; cursor: pointer;
+  }
+  #userForm button:hover { background: #800000; }
+
+  /* User List */
+  #userList { list-style: none; padding-left: 0; }
+  #userList li { margin: 5px 0; }
+  #userList button {
+    margin-left: 10px; background: navy; color: white; border: none; padding: 3px 6px; cursor: pointer; border-radius: 4px;
+  }
+  #userList button:hover { background: #000080; }
+</style>
+</head>
+<body>
+
+<header>
+  <img src="logo.png" alt="School Logo" class="school-logo" style="border-radius:50%; width:80px; float:left; margin-right:20px;">
+  <h1>Olekasasi Mixed Day Secondary School</h1>
+  <p class="motto">Strive To Excel</p>
+  <div style="clear:both;"></div>
+</header>
+
+<main>
+  <!-- Clickable Management Cards -->
+  <a href="admissions.html" class="card">
+    <h3>Admissions</h3>
+    <p>View all student applications (read-only).</p>
+  </a>
+
+  <a href="staff.html" class="card">
+    <h3>Staff</h3>
+    <p>View all staff members and their roles (read-only).</p>
+  </a>
+
+  <a href="clubs.html" class="card">
+    <h3>Clubs</h3>
+    <p>View all school clubs and their members.</p>
+  </a>
+
+  <a href="reports.html" class="card">
+    <h3>Reports</h3>
+    <p>View general school reports (read-only).</p>
+  </a>
+
+  <!-- User Management -->
+  <div class="card">
+    <h3>Manage Users</h3>
+    <form id="userForm">
+      <input type="text" id="newUsername" placeholder="Username" required>
+      <input type="password" id="newPassword" placeholder="Password" required>
+      <select id="newRole" required>
+        <option value="">Select Role</option>
+        <option value="official-admin">Official Admin</option>
+        <option value="teacher">Teacher</option>
+        <option value="school-admin">School Admin</option>
+        <option value="student">Student</option>
+        <option value="parent">Parent</option>
+      </select>
+      <button type="submit">Add User</button>
+    </form>
+
+    <h4>Existing Users:</h4>
+    <ul id="userList"></ul>
+  </div>
+</main>
+
+<footer>
+  <p>© 2025 Olekasasi — Strive To Excel</p>
+</footer>
+
+<script>
+  // Predefined users
+  let users = [
+    { username: "samuelmusyoki", password: "315573301031871", role: "official-admin" },
+    { username: "teacher1", password: "teacherpass123", role: "teacher" },
+    { username: "schooladmin", password: "adminpass123", role: "school-admin" },
+    { username: "student1", password: "studentpass", role: "student" },
+    { username: "parent1", password: "parentpass", role: "parent" }
+  ];
+
+  // Render users
+  function renderUsers() {
+    const list = document.getElementById("userList");
+    list.innerHTML = "";
+    users.forEach((user, index) => {
+      const li = document.createElement("li");
+      li.textContent = `${user.username} (${user.role}) `;
+      const removeBtn = document.createElement("button");
+      removeBtn.textContent = "Remove";
+      removeBtn.onclick = () => removeUser(index);
+      li.appendChild(removeBtn);
+      list.appendChild(li);
+    });
+  }
+
+  // Add new user
+  document.getElementById("userForm").addEventListener("submit", function(e) {
+    e.preventDefault();
+    const username = document.getElementById("newUsername").value.trim();
+    const password = document.getElementById("newPassword").value.trim();
+    const role = document.getElementById("newRole").value;
+
+    if (username && password && role) {
+      users.push({ username, password, role });
+      renderUsers();
+      document.getElementById("userForm").reset();
+    }
+  });
+
+  // Remove user
+  function removeUser(index) {
+    const confirmDel = confirm(`Are you sure you want to remove ${users[index].username}?`);
+    if(confirmDel) {
+      users.splice(index, 1);
+      renderUsers();
+    }
+  }
+
+  // Initialize user list
+  renderUsers();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Parent Dashboard</title>
+<link rel="stylesheet" href="style.css">
+<style>
+  main { display: flex; flex-wrap: wrap; gap: 20px; padding: 20px; }
+  .card {
+    background: #fff;
+    border-left: 6px solid maroon;
+    padding: 20px;
+    flex: 1 1 250px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    border-radius: 10px;
+    transition: transform 0.2s;
+  }
+  .card:hover { transform: scale(1.05); }
+  .card h3 { color: maroon; margin-bottom: 10px; }
+</style>
+</head>
+<body>
+<header>
+  <img src="school-logo.jpg" alt="School Logo" class="school-logo" style="border-radius:50%; width:80px; float:left; margin-right:20px;">
+  <h1>Olekasasi Mixed Day Secondary School</h1>
+  <p class="motto">Strive To Excel</p>
+  <div style="clear:both;"></div>
+</header>
+
+<main>
+  <div class="card">
+    <h3>Child’s Results</h3>
+    <p>View your child’s academic results (read-only).</p>
+  </div>
+  <div class="card">
+    <h3>School Notices</h3>
+    <p>View important announcements from the school.</p>
+  </div>
+  <div class="card">
+    <h3>Logout</h3>
+    <p><a href="index.html">Return to Home/Login</a></p>
+  </div>
+</main>
+
+<footer>
+  <p>© 2025 Olekasasi — Strive To Excel</p>
+</footer>
+</body>
+</html>

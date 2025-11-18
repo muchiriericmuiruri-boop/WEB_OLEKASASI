@@ -1,0 +1,207 @@
+/* GLOBAL RESET */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', Arial, sans-serif;
+}
+
+body {
+  background: #f4f4f4;
+  color: #222;
+  line-height: 1.6;
+}
+
+/* HEADER */
+header {
+  background: navy;
+  color: white;
+  padding: 20px;
+  border-bottom: 8px solid maroon;
+}
+
+.header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.school-logo {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid white;
+}
+
+.motto {
+  font-style: italic;
+  font-size: 15px;
+  color: #ffdfdf;
+}
+
+/* NAVIGATION */
+nav ul {
+  list-style: none;
+  margin-top: 15px;
+}
+
+nav ul li {
+  display: inline-block;
+  margin: 0 15px;
+}
+
+nav ul li a {
+  color: white;
+  text-decoration: none;
+  font-weight: bold;
+  transition: 0.3s;
+}
+
+nav ul li a:hover,
+nav ul li a.active {
+  color: maroon;
+}
+
+.nav-toggle {
+  display: none;
+  font-size: 22px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+@media (max-width:640px){
+  .main-nav {
+    display: none;
+    flex-direction: column;
+  }
+  .nav-toggle {
+    display: block;
+  }
+}
+
+/* HERO */
+.hero {
+  background: linear-gradient(rgba(0,0,80,0.5), rgba(80,0,0,0.5)), url('hero.jpg');
+  background-size: cover;
+  background-position: center;
+  text-align: center;
+  padding: 120px 20px;
+  color: white;
+  border-bottom: 6px solid maroon;
+}
+
+.hero h2 {
+  font-size: 40px;
+  font-weight: bold;
+}
+
+.hero p {
+  font-size: 18px;
+  margin-top: 10px;
+}
+
+/* SECTIONS */
+section {
+  padding: 50px 10%;
+  background: white;
+  margin-bottom: 20px;
+  border-left: 6px solid navy;
+}
+
+section:nth-child(even) {
+  background: #f8f8f8;
+  border-left: 6px solid maroon;
+}
+
+section h2 {
+  font-size: 28px;
+  color: maroon;
+  margin-bottom: 15px;
+}
+
+/* FOOTER */
+footer {
+  background: maroon;
+  color: white;
+  text-align: center;
+  padding: 25px;
+  margin-top: 30px;
+  border-top: 8px solid navy;
+}
+
+footer p {
+  font-size: 14px;
+}
+
+/* GALLERY */
+.gallery {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+}
+
+.gallery img {
+  width: 45%;
+  border-radius: 8px;
+}
+
+/* STAFF */
+ul {
+  list-style: disc;
+  padding-left: 30px;
+  font-size: 18px;
+  margin-top: 10px;
+}
+
+/* CONTACT FORM */
+form {
+  display: flex;
+  flex-direction: column;
+  max-width: 400px;
+  margin: auto;
+}
+
+form label {
+  margin-top: 10px;
+  margin-bottom: 5px;
+}
+
+form input,
+form textarea {
+  padding: 8px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+form button {
+  margin-top: 15px;
+  padding: 10px;
+  border-radius: 5px;
+  background: maroon;
+  color: white;
+  border: none;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+form button:hover {
+  background: navy;
+}
+
+/* IMAGES */
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
