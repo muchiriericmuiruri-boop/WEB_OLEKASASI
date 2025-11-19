@@ -1,4 +1,3 @@
-// Ensure the function is global
 function loginUser() {
     const usernameInput = document.getElementById("username").value.trim();
     const passwordInput = document.getElementById("password").value.trim();
@@ -8,7 +7,7 @@ function loginUser() {
     loginMessage.style.display = "none";
     loginSuccess.style.display = "none";
 
-    // Map username to email
+    // Map username to email (must exist in Firebase Authentication)
     const email = usernameInput.toLowerCase() + "@school.com";
 
     firebase.auth().signInWithEmailAndPassword(email, passwordInput)
