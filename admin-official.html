@@ -1,158 +1,680 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Official Admin Dashboard</title>
-<link rel="stylesheet" href="style.css">
-<style>
-  /* Dashboard Layout */
-  main { display: flex; flex-wrap: wrap; gap: 20px; padding: 20px; }
-  .card {
-    background: #fff;
-    border-left: 6px solid maroon;
-    padding: 20px;
-    flex: 1 1 300px;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-    border-radius: 10px;
-    transition: transform 0.2s;
-  }
-  .card:hover { transform: scale(1.03); }
-  .card h3 { color: maroon; margin-bottom: 10px; }
-
-  /* Make cards clickable */
-  a.card {
-    text-decoration: none;
-    color: inherit;
-    display: block;
-  }
-
-  /* User Management Form */
-  #userForm { display: flex; flex-direction: column; gap: 10px; }
-  #userForm input, #userForm select, #userForm button {
-    padding: 8px; border-radius: 5px; border: 1px solid #ccc;
-  }
-  #userForm button {
-    background: maroon; color: white; border: none; cursor: pointer;
-  }
-  #userForm button:hover { background: #800000; }
-
-  /* User List */
-  #userList { list-style: none; padding-left: 0; }
-  #userList li { margin: 5px 0; }
-  #userList button {
-    margin-left: 10px; background: navy; color: white; border: none; padding: 3px 6px; cursor: pointer; border-radius: 4px;
-  }
-  #userList button:hover { background: #000080; }
-</style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Admin Panel — Olekasasi (Official Admin)</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    :root {
+      --navy: #001f4d;
+      --maroon: #800000;
+      --bg: #f5f7fb;
+      --text: #222;
+    }
+    body { font-family: "Segoe UI", Arial, sans-serif; margin:0; background:var(--bg); color:var(--text); }
+    header { background:var(--navy); color:#fff; padding:12px 18px; display:flex; align-items:center; gap:12px; }
+    header img { width:64px; height:64px; border-radius:50%; object-fit:cover; border:3px solid var(--maroon); }
+    header h1 { margin:0; font-size:20px; }
+    .container { max-width:1200px; margin:18px auto; padding:12px; }
+    .tabs { display:flex; gap:6px; flex-wrap:wrap; margin-bottom:12px; }
+    .tab { padding:8px 12px; background:var(--navy); color:#fff; border-radius:6px; cursor:pointer; }
+    .tab.inactive { background:#777; }
+    .panel { background:#fff; border-radius:8px; padding:14px; box-shadow:0 6px 18px rgba(0,0,0,0.06); margin-bottom:14px; }
+    .flex { display:flex; gap:12px; align-items:flex-start; }
+    .col { flex:1; min-width:240px; }
+    input, select, textarea { width:100%; padding:8px; border:1px solid #ccc; border-radius:6px; margin-top:6px; }
+    label { font-weight:600; margin-top:8px; display:block; }
+    .btn { padding:8px 12px; background:var(--maroon); color:#fff; border:none; border-radius:6px; cursor:pointer; }
+    .btn.secondary { background:#444; }
+    .btn.danger { background:#c0392b; }
+    table { width:100%; border-collapse:collapse; margin-top:8px; }
+    th, td { padding:8px; border-bottom:1px solid #eee; text-align:left; }
+    .photo-preview { width:60px; height:60px; object-fit:cover; border-radius:6px; }
+    .small { font-size:0.9rem; color:#555; }
+    .muted { color:#666; font-size:0.9rem; margin-top:6px; }
+    .row { display:flex; gap:12px; }
+    .center { text-align:center; }
+    .hide { display:none; }
+  </style>
 </head>
 <body>
 
 <header>
-  <img src="logo.png" alt="School Logo" class="school-logo" style="border-radius:50%; width:80px; float:left; margin-right:20px;">
-  <h1>Olekasasi Mixed Day Secondary School</h1>
-  <p class="motto">Strive To Excel</p>
-  <div style="clear:both;"></div>
+  <img src="logo.png" alt="School Logo" onerror="this.style.display='none'">
+  <div>
+    <h1>Olekasasi — Official Admin Panel</h1>
+    <div class="small">Manage users, students, parents, staff, admissions & theme</div>
+  </div>
+  <div style="margin-left:auto;">
+    <button id="btnSignOut" class="btn secondary hide">Sign out</button>
+  </div>
 </header>
 
-<main>
-  <!-- Clickable Management Cards -->
-  <a href="admissions.html" class="card">
-    <h3>Admissions</h3>
-    <p>View all student applications (read-only).</p>
-  </a>
-
-  <a href="staff.html" class="card">
-    <h3>Staff</h3>
-    <p>View all staff members and their roles (read-only).</p>
-  </a>
-
-  <a href="clubs.html" class="card">
-    <h3>Clubs</h3>
-    <p>View all school clubs and their members.</p>
-  </a>
-
-  <a href="reports.html" class="card">
-    <h3>Reports</h3>
-    <p>View general school reports (read-only).</p>
-  </a>
-
-  <!-- User Management -->
-  <div class="card">
-    <h3>Manage Users</h3>
-    <form id="userForm">
-      <input type="text" id="newUsername" placeholder="Username" required>
-      <input type="password" id="newPassword" placeholder="Password" required>
-      <select id="newRole" required>
-        <option value="">Select Role</option>
-        <option value="official-admin">Official Admin</option>
-        <option value="teacher">Teacher</option>
-        <option value="school-admin">School Admin</option>
-        <option value="student">Student</option>
-        <option value="parent">Parent</option>
-      </select>
-      <button type="submit">Add User</button>
-    </form>
-
-    <h4>Existing Users:</h4>
-    <ul id="userList"></ul>
+<div class="container">
+  <div class="tabs" id="tabs">
+    <div class="tab" data-tab="dashboard">Dashboard</div>
+    <div class="tab inactive" data-tab="admissions">Admissions</div>
+    <div class="tab inactive" data-tab="students">Students</div>
+    <div class="tab inactive" data-tab="parents">Parents</div>
+    <div class="tab inactive" data-tab="staff">Staff</div>
+    <div class="tab inactive" data-tab="users">Users</div>
+    <div class="tab inactive" data-tab="theme">Theme</div>
+    <div class="tab inactive" data-tab="logs">Logs</div>
   </div>
-</main>
 
-<footer>
-  <p>© 2025 Olekasasi — Strive To Excel</p>
-</footer>
+  <!-- Dashboard panel -->
+  <div id="panel-dashboard" class="panel">
+    <h3>Dashboard</h3>
+    <div class="flex">
+      <div class="col panel">
+        <h4>Total students</h4>
+        <div id="countStudents">—</div>
+      </div>
+      <div class="col panel">
+        <h4>Total pending admissions</h4>
+        <div id="countAdmissions">—</div>
+      </div>
+      <div class="col panel">
+        <h4>Total users</h4>
+        <div id="countUsers">—</div>
+      </div>
+    </div>
+  </div>
 
+  <!-- Admissions -->
+  <div id="panel-admissions" class="panel hide">
+    <h3>Pending Admissions</h3>
+    <p class="muted">Review online applications and approve to add students to the system.</p>
+    <div id="admissionsList">Loading admissions...</div>
+  </div>
+
+  <!-- Students -->
+  <div id="panel-students" class="panel hide">
+    <h3>Students</h3>
+    <div class="row">
+      <div style="flex:1;">
+        <label>Search</label>
+        <input id="searchStudent" placeholder="Search name or admission no">
+      </div>
+      <div style="width:200px;">
+        <label>&nbsp;</label>
+        <button id="btnNewStudent" class="btn" style="width:100%;">New Student</button>
+      </div>
+    </div>
+
+    <!-- Student form -->
+    <div id="studentForm" class="panel hide">
+      <h4 id="studentFormTitle">Add Student</h4>
+      <label>Full name</label><input id="stu_name">
+      <label>Admission No</label><input id="stu_adm">
+      <label>UPI</label><input id="stu_upi">
+      <label>Class</label><input id="stu_class">
+      <label>Parent (link)</label>
+      <select id="stu_parent"></select>
+      <label>Upload Photo</label><input id="stu_photo" type="file" accept="image/*">
+      <div style="margin-top:8px;">
+        <button id="btnSaveStudent" class="btn">Save Student</button>
+        <button id="btnCancelStudent" class="btn secondary">Cancel</button>
+      </div>
+    </div>
+
+    <div id="studentsList">Loading students...</div>
+  </div>
+
+  <!-- Parents -->
+  <div id="panel-parents" class="panel hide">
+    <h3>Parents</h3>
+    <div class="row">
+      <div style="flex:1;">
+        <label>Parent name</label><input id="parent_name">
+        <label>Phone</label><input id="parent_phone">
+        <label>Linked student (admission no)</label><input id="parent_student_adm" placeholder="admission no">
+        <div style="margin-top:10px;">
+          <button id="btnAddParent" class="btn">Add Parent</button>
+          <button id="btnRefreshParents" class="btn secondary">Refresh</button>
+        </div>
+      </div>
+      <div style="flex:1;">
+        <h4>Existing parents</h4>
+        <div id="parentsList">Loading parents...</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Staff -->
+  <div id="panel-staff" class="panel hide">
+    <h3>Staff</h3>
+    <div class="row">
+      <div style="flex:1;">
+        <label>Full name</label><input id="staff_name">
+        <label>Position</label><input id="staff_position">
+        <label>Email</label><input id="staff_email">
+        <label>Phone</label><input id="staff_phone">
+        <div style="margin-top:10px;">
+          <button id="btnAddStaff" class="btn">Add Staff</button>
+          <button id="btnRefreshStaff" class="btn secondary">Refresh</button>
+        </div>
+      </div>
+      <div style="flex:1;">
+        <h4>Staff List</h4>
+        <div id="staffList">Loading staff...</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Users -->
+  <div id="panel-users" class="panel hide">
+    <h3>Users</h3>
+    <div class="row">
+      <div style="flex:1;">
+        <label>Username</label><input id="user_username">
+        <label>Password</label><input id="user_password">
+        <label>Role</label>
+        <select id="user_role">
+          <option value="official-admin">Official Admin</option>
+          <option value="school-admin">School Admin</option>
+          <option value="teacher">Teacher</option>
+          <option value="director-of-subjects">Director</option>
+          <option value="student">Student</option>
+          <option value="parent">Parent</option>
+        </select>
+        <div style="margin-top:10px;">
+          <button id="btnAddUser2" class="btn">Add User</button>
+          <button id="btnRefreshUsers2" class="btn secondary">Refresh</button>
+        </div>
+        <p class="muted">Note: Users stored in <code>users</code> collection; students & parents use separate collections.</p>
+      </div>
+      <div style="flex:1;">
+        <h4>All Users</h4>
+        <div id="usersList">Loading users...</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Theme -->
+  <div id="panel-theme" class="panel hide">
+    <h3>Theme Editor</h3>
+    <label>Primary (nav/header) color</label>
+    <input id="theme_primary" type="color" value="#001f4d">
+    <label>Accent (buttons / highlights)</label>
+    <input id="theme_accent" type="color" value="#800000">
+    <div style="margin-top:10px;">
+      <button id="btnSaveTheme" class="btn">Save Theme</button>
+      <button id="btnApplyTheme" class="btn secondary">Apply Locally</button>
+    </div>
+    <p class="muted">Saving stores theme in Firestore (collection <code>site</code> doc <code>theme</code>).</p>
+  </div>
+
+  <!-- Logs -->
+  <div id="panel-logs" class="panel hide">
+    <h3>Activity Logs</h3>
+    <div id="logsArea">No logs yet.</div>
+  </div>
+
+</div>
+
+<!-- Firebase SDKs (namespaced) -->
+<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-storage.js"></script>
+
+<!-- Your firebase.js must be present and initialize app and db/auth/storage -->
+<script src="firebase.js"></script>
+
+<!-- Admin logic -->
 <script>
-  // Predefined users
-  let users = [
-    { username: "samuelmusyoki", password: "315573301031871", role: "official-admin" },
-    { username: "teacher1", password: "teacherpass123", role: "teacher" },
-    { username: "schooladmin", password: "adminpass123", role: "school-admin" },
-    { username: "student1", password: "studentpass", role: "student" },
-    { username: "parent1", password: "parentpass", role: "parent" }
-  ];
+  // Simple tab switcher
+  const tabs = document.querySelectorAll('.tab');
+  tabs.forEach(t => t.addEventListener('click', () => openTab(t.dataset.tab)));
+  function openTab(name) {
+    document.querySelectorAll('[id^="panel-"]').forEach(p => p.classList.add('hide'));
+    const panel = document.getElementById('panel-' + name);
+    if (panel) panel.classList.remove('hide');
+    tabs.forEach(tb => tb.classList.add('inactive'));
+    document.querySelector(`.tab[data-tab="${name}"]`).classList.remove('inactive');
+  }
+  openTab('dashboard');
 
-  // Render users
-  function renderUsers() {
-    const list = document.getElementById("userList");
-    list.innerHTML = "";
-    users.forEach((user, index) => {
-      const li = document.createElement("li");
-      li.textContent = `${user.username} (${user.role}) `;
-      const removeBtn = document.createElement("button");
-      removeBtn.textContent = "Remove";
-      removeBtn.onclick = () => removeUser(index);
-      li.appendChild(removeBtn);
-      list.appendChild(li);
+  // Firestore refs (db, storage come from your firebase.js)
+  const admissionsCol = db.collection('admissions');
+  const studentsCol = db.collection('students');
+  const parentsCol = db.collection('parents');
+  const staffCol = db.collection('staff');
+  const usersCol = db.collection('users');
+  const siteDoc = db.collection('site').doc('theme');
+
+  // DASHBOARD counts
+  async function loadCounts() {
+    const stSnap = await studentsCol.get();
+    const admSnap = await admissionsCol.get();
+    const usersSnap = await usersCol.get();
+    document.getElementById('countStudents').textContent = stSnap.size;
+    document.getElementById('countAdmissions').textContent = admSnap.size;
+    document.getElementById('countUsers').textContent = usersSnap.size;
+  }
+
+  // ADMINS: Admissions list & approve
+  async function loadAdmissions() {
+    const el = document.getElementById('admissionsList');
+    el.innerHTML = 'Loading...';
+    const snap = await admissionsCol.orderBy('createdAt','desc').get();
+    if (snap.empty) { el.innerHTML = '<p class="muted">No pending admissions</p>'; return; }
+    let html = '<table><thead><tr><th>Name</th><th>Admission</th><th>Class</th><th>Parent</th><th>Actions</th></tr></thead><tbody>';
+    snap.forEach(docSnap => {
+      const a = docSnap.data();
+      html += `<tr>
+        <td>${a.name || ''}</td>
+        <td>${a.admission || ''}</td>
+        <td>${a.class || ''}</td>
+        <td>${a.parentName || ''} <div class="small">${a.parentPhone || ''}</div></td>
+        <td>
+          <button class="btn" onclick="approveAdmission('${docSnap.id}')">Approve</button>
+          <button class="btn danger" onclick="deleteAdmission('${docSnap.id}')">Delete</button>
+        </td>
+      </tr>`;
+    });
+    html += '</tbody></table>';
+    el.innerHTML = html;
+  }
+
+  async function approveAdmission(id) {
+    if (!confirm('Approve this application and add student to system?')) return;
+    const docRef = await admissionsCol.doc(id).get();
+    if (!docRef.exists) { alert('Not found'); return; }
+    const data = docRef.data();
+
+    try {
+      // create student record
+      const studentRef = await studentsCol.add({
+        name: data.name,
+        admission: data.admission,
+        upi: data.upi || '',
+        class: data.class || '',
+        parentName: data.parentName || '',
+        parentPhone: data.parentPhone || '',
+        createdAt: Date.now()
+      });
+
+      // If applicant uploaded a photo (we expect a photoUrl field), copy its URL or move storage
+      if (data.photoPath) {
+        try {
+          const fromRef = firebase.storage().ref(data.photoPath);
+          // download url and then copy by re-uploading? Simpler: keep the original URL in student doc
+          const url = await fromRef.getDownloadURL();
+          await studentsCol.doc(studentRef.id).update({ photoUrl: url });
+        } catch(e){ /* ignore */ }
+      }
+
+      // create parent record (if parent data exists) and link parent to student
+      const parentRef = await parentsCol.add({
+        name: data.parentName || '',
+        phone: data.parentPhone || '',
+        studentId: studentRef.id,
+        createdAt: Date.now()
+      });
+
+      // delete admission doc
+      await admissionsCol.doc(id).delete();
+
+      alert('Admission approved and student added.');
+      loadAdmissions(); loadStudents(); loadParents(); loadCounts();
+    } catch (err) {
+      console.error(err); alert('Error approving: ' + err.message);
+    }
+  }
+
+  async function deleteAdmission(id) {
+    if (!confirm('Delete this admission application?')) return;
+    await admissionsCol.doc(id).delete();
+    loadAdmissions(); loadCounts();
+  }
+
+  // STUDENTS
+  let editingStudentId = null;
+  document.getElementById('btnNewStudent').addEventListener('click', () => {
+    editingStudentId = null;
+    document.getElementById('studentFormTitle').textContent = 'Add Student';
+    document.getElementById('studentForm').classList.remove('hide');
+    fillParentSelect();
+  });
+  document.getElementById('btnCancelStudent').addEventListener('click', () => {
+    document.getElementById('studentForm').classList.add('hide');
+  });
+
+  async function loadStudents() {
+    const el = document.getElementById('studentsList');
+    el.innerHTML = 'Loading students...';
+    const snap = await studentsCol.orderBy('createdAt','desc').get();
+    if (snap.empty) { el.innerHTML = '<p class="muted">No students</p>'; return; }
+    let html = '<table><thead><tr><th>Photo</th><th>Name</th><th>Admission</th><th>UPI</th><th>Class</th><th>Parent</th><th>Actions</th></tr></thead><tbody>';
+    snap.forEach(docSnap => {
+      const s = docSnap.data();
+      html += `<tr>
+        <td>${s.photoUrl ? `<img src="${s.photoUrl}" class="photo-preview">` : ''}</td>
+        <td>${s.name || ''}</td>
+        <td>${s.admission || ''}</td>
+        <td>${s.upi || ''}</td>
+        <td>${s.class || ''}</td>
+        <td>${s.parentName || ''} <div class="small">${s.parentPhone || ''}</div></td>
+        <td>
+          <button class="btn" onclick="editStudent('${docSnap.id}')">Edit</button>
+          <button class="btn danger" onclick="deleteStudent('${docSnap.id}')">Delete</button>
+        </td>
+      </tr>`;
+    });
+    html += '</tbody></table>';
+    el.innerHTML = html;
+  }
+
+  async function editStudent(id) {
+    editingStudentId = id;
+    const snap = await studentsCol.doc(id).get();
+    if (!snap.exists) return alert('Student not found');
+    const s = snap.data();
+    document.getElementById('studentFormTitle').textContent = 'Edit Student';
+    document.getElementById('stu_name').value = s.name || '';
+    document.getElementById('stu_adm').value = s.admission || '';
+    document.getElementById('stu_upi').value = s.upi || '';
+    document.getElementById('stu_class').value = s.class || '';
+    await fillParentSelect(s.parentId || null);
+    document.getElementById('studentForm').classList.remove('hide');
+  }
+
+  async function deleteStudent(id) {
+    if (!confirm('Delete student?')) return;
+    try {
+      // delete photo in storage if exists
+      const sDoc = await studentsCol.doc(id).get();
+      const data = sDoc.data();
+      if (data.photoPath) {
+        try { await firebase.storage().ref(data.photoPath).delete(); } catch(e) { /* ignore */ }
+      }
+      await studentsCol.doc(id).delete();
+      alert('Deleted');
+      loadStudents(); loadCounts();
+    } catch (err) { console.error(err); alert(err.message); }
+  }
+
+  // Save student form
+  document.getElementById('btnSaveStudent').addEventListener('click', async () => {
+    const name = document.getElementById('stu_name').value.trim();
+    const admission = document.getElementById('stu_adm').value.trim();
+    const upi = document.getElementById('stu_upi').value.trim();
+    const cls = document.getElementById('stu_class').value.trim();
+    const parentSelect = document.getElementById('stu_parent');
+    const parentId = parentSelect.value || null;
+    const parentName = parentSelect.options[parentSelect.selectedIndex]?.dataset?.name || '';
+    const parentPhone = parentSelect.options[parentSelect.selectedIndex]?.dataset?.phone || '';
+
+    const fileInput = document.getElementById('stu_photo');
+    const file = fileInput.files[0];
+
+    if (!name || !admission) return alert('Name and admission required');
+
+    try {
+      if (editingStudentId) {
+        await studentsCol.doc(editingStudentId).update({ name, admission, upi, class: cls, parentId, parentName, parentPhone, updatedAt: Date.now() });
+        if (file) {
+          const path = `students/${editingStudentId}/${file.name}`;
+          const ref = firebase.storage().ref(path);
+          await ref.put(file);
+          const url = await ref.getDownloadURL();
+          await studentsCol.doc(editingStudentId).update({ photoUrl: url, photoPath: path });
+        }
+        alert('Student updated');
+      } else {
+        const newDoc = await studentsCol.add({ name, admission, upi, class: cls, parentId, parentName, parentPhone, createdAt: Date.now() });
+        if (file) {
+          const path = `students/${newDoc.id}/${file.name}`;
+          const ref = firebase.storage().ref(path);
+          await ref.put(file);
+          const url = await ref.getDownloadURL();
+          await studentsCol.doc(newDoc.id).update({ photoUrl: url, photoPath: path });
+        }
+        alert('Student added');
+      }
+      document.getElementById('studentForm').classList.add('hide');
+      loadStudents(); loadCounts(); loadParents();
+    } catch (err) { console.error(err); alert(err.message); }
+  });
+
+  // Fill parent select
+  async function fillParentSelect(selectedId = null) {
+    const sel = document.getElementById('stu_parent');
+    sel.innerHTML = '<option value="">-- none --</option>';
+    const snap = await parentsCol.orderBy('createdAt','desc').get();
+    snap.forEach(d => {
+      const v = d.id;
+      const data = d.data();
+      const opt = document.createElement('option');
+      opt.value = v;
+      opt.dataset.name = data.name || '';
+      opt.dataset.phone = data.phone || '';
+      opt.textContent = `${data.name || ''} (${data.studentAdm || data.studentAdmission || ''})`;
+      if (selectedId && selectedId === v) opt.selected = true;
+      sel.appendChild(opt);
     });
   }
 
-  // Add new user
-  document.getElementById("userForm").addEventListener("submit", function(e) {
-    e.preventDefault();
-    const username = document.getElementById("newUsername").value.trim();
-    const password = document.getElementById("newPassword").value.trim();
-    const role = document.getElementById("newRole").value;
-
-    if (username && password && role) {
-      users.push({ username, password, role });
-      renderUsers();
-      document.getElementById("userForm").reset();
-    }
+  // PARENTS
+  document.getElementById('btnAddParent').addEventListener('click', async () => {
+    const name = document.getElementById('parent_name').value.trim();
+    const phone = document.getElementById('parent_phone').value.trim();
+    const studentAdm = document.getElementById('parent_student_adm').value.trim();
+    if (!name || !phone || !studentAdm) return alert('All fields required');
+    // find student by admission
+    const sSnap = await studentsCol.where('admission','==',studentAdm).get();
+    let studentId = null;
+    if (!sSnap.empty) studentId = sSnap.docs[0].id;
+    const pDoc = await parentsCol.add({ name, phone, studentId, studentAdmission: studentAdm, createdAt: Date.now() });
+    alert('Parent added');
+    document.getElementById('parent_name').value=''; document.getElementById('parent_phone').value=''; document.getElementById('parent_student_adm').value='';
+    loadParents();
   });
 
-  // Remove user
-  function removeUser(index) {
-    const confirmDel = confirm(`Are you sure you want to remove ${users[index].username}?`);
-    if(confirmDel) {
-      users.splice(index, 1);
-      renderUsers();
-    }
+  async function loadParents() {
+    const el = document.getElementById('parentsList');
+    el.innerHTML = 'Loading...';
+    const snap = await parentsCol.orderBy('createdAt','desc').get();
+    if (snap.empty) { el.innerHTML = '<p class="muted">No parents</p>'; return; }
+    let html = '<table><thead><tr><th>Name</th><th>Phone</th><th>Child</th><th>Actions</th></tr></thead><tbody>';
+    snap.forEach(d => {
+      const data = d.data();
+      html += `<tr>
+        <td>${data.name || ''}</td>
+        <td>${data.phone || ''}</td>
+        <td>${data.studentAdmission || ''}</td>
+        <td>
+          <button class="btn" onclick="editParent('${d.id}')">Edit</button>
+          <button class="btn danger" onclick="deleteParent('${d.id}')">Delete</button>
+        </td>
+      </tr>`;
+    });
+    html += '</tbody></table>';
+    el.innerHTML = html;
   }
 
-  // Initialize user list
-  renderUsers();
+  window.deleteParent = async function(id) {
+    if (!confirm('Delete parent?')) return;
+    await parentsCol.doc(id).delete();
+    loadParents();
+  };
+  window.editParent = async function(id) {
+    const snap = await parentsCol.doc(id).get();
+    if (!snap.exists) return alert('Not found');
+    const d = snap.data();
+    const name = prompt('Name', d.name) || d.name;
+    const phone = prompt('Phone', d.phone) || d.phone;
+    await parentsCol.doc(id).update({ name, phone, updatedAt: Date.now() });
+    alert('Updated');
+    loadParents();
+  };
+
+  // STAFF
+  document.getElementById('btnAddStaff').addEventListener('click', async () => {
+    const name = document.getElementById('staff_name').value.trim();
+    const position = document.getElementById('staff_position').value.trim();
+    const email = document.getElementById('staff_email').value.trim();
+    const phone = document.getElementById('staff_phone').value.trim();
+    if (!name) return alert('Name required');
+    await staffCol.add({ name, position, email, phone, createdAt: Date.now() });
+    document.getElementById('staff_name').value=''; document.getElementById('staff_position').value=''; document.getElementById('staff_email').value=''; document.getElementById('staff_phone').value='';
+    loadStaff();
+  });
+
+  async function loadStaff() {
+    const el = document.getElementById('staffList');
+    el.innerHTML = 'Loading...';
+    const snap = await staffCol.orderBy('createdAt','desc').get();
+    if (snap.empty) { el.innerHTML = '<p class="muted">No staff</p>'; return; }
+    let html = '<table><thead><tr><th>Name</th><th>Position</th><th>Contact</th><th>Actions</th></tr></thead><tbody>';
+    snap.forEach(d => {
+      const data = d.data();
+      html += `<tr>
+        <td>${data.name || ''}</td>
+        <td>${data.position || ''}</td>
+        <td>${data.email || ''} <div class="small">${data.phone||''}</div></td>
+        <td>
+          <button class="btn" onclick="editStaff('${d.id}')">Edit</button>
+          <button class="btn danger" onclick="deleteStaff('${d.id}')">Delete</button>
+        </td>
+      </tr>`;
+    });
+    html += '</tbody></table>';
+    el.innerHTML = html;
+  }
+
+  window.deleteStaff = async function(id) {
+    if (!confirm('Delete staff?')) return;
+    await staffCol.doc(id).delete();
+    loadStaff();
+  };
+  window.editStaff = async function(id) {
+    const snap = await staffCol.doc(id).get();
+    if (!snap.exists) return alert('Not found');
+    const d = snap.data();
+    const name = prompt('Name', d.name) || d.name;
+    const position = prompt('Position', d.position) || d.position;
+    const email = prompt('Email', d.email) || d.email;
+    const phone = prompt('Phone', d.phone) || d.phone;
+    await staffCol.doc(id).update({ name, position, email, phone, updatedAt: Date.now() });
+    alert('Updated');
+    loadStaff();
+  };
+
+  // USERS
+  document.getElementById('btnAddUser2').addEventListener('click', async () => {
+    const username = document.getElementById('user_username').value.trim();
+    const password = document.getElementById('user_password').value.trim();
+    const role = document.getElementById('user_role').value;
+    if (!username || !password || !role) return alert('Provide username, password and role');
+    await usersCol.add({ username, password, role, createdAt: Date.now() });
+    document.getElementById('user_username').value=''; document.getElementById('user_password').value='';
+    loadUsers();
+  });
+
+  async function loadUsers() {
+    const el = document.getElementById('usersList');
+    el.innerHTML = 'Loading...';
+    const snap = await usersCol.orderBy('createdAt','desc').get();
+    if (snap.empty) { el.innerHTML = '<p class="muted">No users</p>'; return; }
+    let html = '<table><thead><tr><th>Username</th><th>Role</th><th>Actions</th></tr></thead><tbody>';
+    snap.forEach(d => {
+      const data = d.data();
+      html += `<tr>
+        <td>${data.username || ''}</td>
+        <td>${data.role || ''}</td>
+        <td>
+          <button class="btn" onclick="editUser('${d.id}')">Edit</button>
+          <button class="btn danger" onclick="deleteUser('${d.id}')">Delete</button>
+        </td>
+      </tr>`;
+    });
+    html += '</tbody></table>';
+    el.innerHTML = html;
+  }
+
+  window.deleteUser = async function(id) {
+    if (!confirm('Delete user?')) return;
+    await usersCol.doc(id).delete();
+    loadUsers();
+  };
+  window.editUser = async function(id) {
+    const snap = await usersCol.doc(id).get();
+    if (!snap.exists) return alert('Not found');
+    const d = snap.data();
+    const username = prompt('Username', d.username) || d.username;
+    const role = prompt('Role', d.role) || d.role;
+    await usersCol.doc(id).update({ username, role, updatedAt: Date.now() });
+    alert('Updated');
+    loadUsers();
+  };
+
+  // THEME editor
+  document.getElementById('btnSaveTheme').addEventListener('click', async () => {
+    const primary = document.getElementById('theme_primary').value;
+    const accent = document.getElementById('theme_accent').value;
+    await db.collection('site').doc('theme').set({ primary, accent, updatedAt: Date.now() });
+    alert('Theme saved to Firestore. Click "Apply Locally" to preview.');
+  });
+  document.getElementById('btnApplyTheme').addEventListener('click', async () => {
+    const primary = document.getElementById('theme_primary').value;
+    const accent = document.getElementById('theme_accent').value;
+    document.documentElement.style.setProperty('--navy', primary);
+    document.documentElement.style.setProperty('--maroon', accent);
+    alert('Theme applied locally. Public pages must load theme from Firestore to reflect changes.');
+  });
+
+  // initial load
+  async function initialLoad() {
+    await loadCounts();
+    await loadAdmissions();
+    await loadStudents();
+    await loadParents();
+    await loadStaff();
+    await loadUsers();
+  }
+  initialLoad();
+
+  // refresh buttons
+  document.getElementById('btnRefreshUsers2').addEventListener('click', loadUsers);
+  document.getElementById('btnRefreshStaff').addEventListener('click', loadStaff);
+  document.getElementById('btnRefreshParents').addEventListener('click', loadParents);
+
+  // simple auth sign out button behavior if you use firebase auth - optional
+  const btnSignOut = document.getElementById('btnSignOut');
+  if (typeof firebase !== 'undefined' && firebase.auth) {
+    firebase.auth().onAuthStateChanged(user => {
+      if (user) btnSignOut.classList.remove('hide'); else btnSignOut.classList.add('hide');
+    });
+    btnSignOut.addEventListener('click', () => firebase.auth().signOut().then(()=> location.reload()));
+  }
+
+  // small search behavior
+  document.getElementById('searchStudent').addEventListener('input', async (e) => {
+    const q = e.target.value.trim().toLowerCase();
+    const el = document.getElementById('studentsList');
+    if (!q) return loadStudents();
+    // naive client-side filter: fetch all and filter
+    const snap = await studentsCol.get();
+    const arr = [];
+    snap.forEach(d => { const data = d.data(); data.id = d.id; arr.push(data); });
+    const filtered = arr.filter(s => (s.name||'').toLowerCase().includes(q) || (s.admission||'').toLowerCase().includes(q));
+    // render filtered
+    if (filtered.length === 0) { el.innerHTML = '<p class="muted">No students</p>'; return; }
+    let html = '<table><thead><tr><th>Photo</th><th>Name</th><th>Admission</th><th>UPI</th><th>Class</th><th>Parent</th><th>Actions</th></tr></thead><tbody>';
+    filtered.forEach(s => {
+      html += `<tr>
+        <td>${s.photoUrl ? `<img src="${s.photoUrl}" class="photo-preview">` : ''}</td>
+        <td>${s.name||''}</td><td>${s.admission||''}</td><td>${s.upi||''}</td><td>${s.class||''}</td><td>${s.parentName||''}</td>
+        <td><button class="btn" onclick="editStudent('${s.id}')">Edit</button> <button class="btn danger" onclick="deleteStudent('${s.id}')">Delete</button></td>
+      </tr>`;
+    });
+    html += '</tbody></table>'; el.innerHTML = html;
+  });
+
 </script>
 
 </body>
