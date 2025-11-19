@@ -1,5 +1,3 @@
-// main.js
-
 // LOGIN FUNCTION
 function loginUser() {
     const username = document.getElementById("username").value.trim();
@@ -9,46 +7,37 @@ function loginUser() {
       .where("username", "==", username)
       .where("password", "==", password)
       .get()
-      .then((querySnapshot) => {
-        if (!querySnapshot.empty) {
-          const user = querySnapshot.docs[0].data();
+      .then((snapshot) => {
 
-          // Redirect by role
-          if (user.role === "admin") {
-            window.location.href = "admin-official.html";
-          } else if (user.role === "teacher") {
-            window.location.href = "teacher-dashboard.html";
-          } else if (user.role === "student") {
-            window.location.href = "student-dashboard.html";
-          } else {
-            alert("Unknown user role.");
-          }
-
-        } else {
-          alert("Invalid username or password!");
+        if (snapshot.empty) {
+            alert("❌ Wrong username or password!");
+            return;
         }
-      })
-      .catch((error) => console.log("Error: ", error));
-}
 
+        const user = snapshot.docs[0].data();
 
-// ADD USER (Admin)
-function addUser(username, password, role) {
-  db.collection("users").add({
-      username: username,
-      password: password,
-      role: role
-  })
-  .then(() => alert("User added successfully!"))
-  .catch((error) => console.error("Error adding user: ", error));
-}
-
-
-// UPLOAD STUDENT PHOTO
-function uploadStudentPhoto(file, admissionNo) {
-  const storageRef = storage.ref("students/" + admissionNo + "/" + file.name);
-
-  storageRef.put(file)
-    .then(() => alert("Photo uploaded successfully!"))
-    .catch((error) => console.log("Upload error: ", error));
+        // Redirect based on role
+        switch(user.role) {
+            case "official-admin":
+                window.location.href = "admin-official.html";
+                break;
+            case "teacher":
+                window.location.href = "admin-teacher.html";
+                break;
+            case "school-admin":
+                window.location.href = "admin-school.html";
+                break;
+            case "student":
+                window.location.href = "dashboard-student.html";
+                break;
+            case "parent":
+                window.location.href = "dashboard-parent.html";
+                break;
+            case "director-of-subjects":
+                window.location.href = "director-subjects.html";
+                break;
+            default:
+                alert("User role not recognized.");
+        }
+      });
 }
