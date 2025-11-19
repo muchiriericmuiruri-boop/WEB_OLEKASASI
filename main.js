@@ -7,7 +7,7 @@ function loginUser() {
     loginMessage.style.display = "none";
     loginSuccess.style.display = "none";
 
-    // Map username to email (must exist in Firebase Authentication)
+    // Map username to email
     const email = usernameInput.toLowerCase() + "@school.com";
 
     firebase.auth().signInWithEmailAndPassword(email, passwordInput)
@@ -15,7 +15,6 @@ function loginUser() {
             loginSuccess.style.display = "block";
             loginSuccess.textContent = "Login successful! Redirecting...";
 
-            // Redirect based on username
             switch(usernameInput.toLowerCase()) {
                 case "samuelmusyoki":
                     window.location.href = "admin-official.html";
