@@ -1,4 +1,4 @@
-// Login function
+// Ensure the function is global
 function loginUser() {
     const usernameInput = document.getElementById("username").value.trim();
     const passwordInput = document.getElementById("password").value.trim();
@@ -8,12 +8,11 @@ function loginUser() {
     loginMessage.style.display = "none";
     loginSuccess.style.display = "none";
 
-    // Convert username to email (for Firebase login)
-    let email = usernameInput.toLowerCase() + "@school.com";
+    // Map username to email
+    const email = usernameInput.toLowerCase() + "@school.com";
 
-    auth.signInWithEmailAndPassword(email, passwordInput)
+    firebase.auth().signInWithEmailAndPassword(email, passwordInput)
         .then((userCredential) => {
-            // Login successful
             loginSuccess.style.display = "block";
             loginSuccess.textContent = "Login successful! Redirecting...";
 
