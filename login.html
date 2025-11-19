@@ -1,89 +1,105 @@
-<!-- Firebase App (core) -->
-<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js"></script>
-<!-- Firebase Firestore -->
-<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js"></script>
-<!-- Firebase Auth -->
-<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js"></script>
-<!-- Firebase Storage -->
-<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-storage.js"></script>
-<!-- Your firebase.js -->
-<script src="firebase.js"></script>
-<!-- Your main JS -->
-<script src="main.js"></script>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login — Olekasasi School</title>
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>School Login | Olekasasi Mixed Day Secondary</title>
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #003366, #006699);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .login-box {
+            width: 350px;
+            background: white;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            text-align: center;
+        }
+
+        h2 {
+            margin-bottom: 20px;
+            color: #003366;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            margin: 8px 0;
+            border-radius: 5px;
+            border: 1px solid #999;
+            font-size: 16px;
+        }
+
+        input:focus {
+            border-color: #006699;
+            outline: none;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            margin-top: 12px;
+            background: #003366;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 17px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #005599;
+        }
+
+        .error {
+            color: red;
+            margin-top: 10px;
+            display: none;
+        }
+
+        .success {
+            color: green;
+            margin-top: 10px;
+            display: none;
+        }
+    </style>
+
 </head>
 <body>
-  <header>
-    <div class="header-inner">
-      <div class="brand">
-        <img src="school-logo.jpg" alt="Olekasasi Logo" class="school-logo">
-        <div>
-          <h1>Olekasasi Mixed Day Secondary School</h1>
-          <p class="motto">Strive To Excel</p>
-        </div>
-      </div>
-      <button class="nav-toggle" onclick="toggleNav()">☰</button>
-      <nav class="main-nav" id="mainNav">
-        <ul>
-          <li><a href="index.html">Home</a></li>
-          <li><a href="about.html">About</a></li>
-          <li><a href="academics.html">Academics</a></li>
-          <li><a href="clubs.html">Clubs</a></li>
-          <li><a href="gallery.html">Gallery</a></li>
-          <li><a href="staff.html">Staff</a></li>
-          <li><a href="admissions.html">Admissions</a></li>
-          <li><a href="contact.html">Contact</a></li>
-          <li><a href="login.html" class="active">Login</a></li>
-          <li><a href="login.html">Login</a></li>
 
-        </ul>
-      </nav>
+    <div class="login-box">
+        <h2>School Login</h2>
+
+        <input type="text" id="username" placeholder="Enter Username" required>
+        <input type="password" id="password" placeholder="Enter Password" required>
+
+        <button onclick="loginUser()">Login</button>
+
+        <p id="loginMessage" class="error"></p>
+        <p id="loginSuccess" class="success"></p>
     </div>
-  </header>
 
-  <main>
-    <section>
-      <h2>Login</h2>
-      <p>Enter your credentials to access student or staff portal.</p>
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-storage.js"></script>
 
-      <form id="loginForm">
-        <label for="username">Username or Email:</label>
-        <input type="text" id="username" name="username" placeholder="Enter username or email" required>
+    <!-- Your Firebase Config -->
+    <script src="firebase.js"></script>
 
-        <label for="password">Password:</label>
-        <input type="password" id="password" name="password" placeholder="Enter password" required>
+    <!-- Login Logic -->
+    <script src="main.js"></script>
 
-        <button type="submit">Login</button>
-      </form>
-
-      <p id="loginMessage" style="color: red; margin-top: 10px;"></p>
-    </section>
-  </main>
-
-  <footer>
-    <p>© 2025 Olekasasi — Strive To Excel</p>
-  </footer>
-
-  <script src="script.js"></script>
 </body>
 </html>
-<!-- Firebase SDKs -->
-<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-storage.js"></script>
-
-<!-- Your Firebase Config -->
-<script src="firebase.js"></script>
-
-<!-- Login Logic -->
-<script src="main.js"></script>
-
-
