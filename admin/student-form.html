@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Student Form - Admin</title>
+<style>
+body { font-family: Arial,sans-serif; background:#f4f4f4; margin:0; padding:20px; }
+form { background:white; padding:20px; border-radius:8px; max-width:500px; margin:auto; }
+input, select { width:100%; padding:10px; margin:10px 0; border-radius:5px; border:1px solid #ccc; }
+button { padding:10px 16px; border:none; border-radius:5px; background:#001f3f; color:white; cursor:pointer; }
+button:hover { background:#003366; }
+</style>
+</head>
+<body>
+
+<h2 id="formTitle">Add New Student</h2>
+
+<form id="studentForm">
+  <input type="text" id="fullName" placeholder="Full Name" required>
+  <input type="text" id="admissionNumber" placeholder="Admission Number" required>
+  <input type="text" id="UPI" placeholder="UPI Number" required>
+  <input type="text" id="class" placeholder="Class" required>
+  <input type="text" id="parentName" placeholder="Parent Full Name" required>
+  <input type="text" id="parentPhone" placeholder="Parent Phone Number" required>
+  <input type="url" id="photoURL" placeholder="Photo URL">
+  <button type="submit">Save Student</button>
+</form>
+
+<script type="module" src="../login/firebase.js"></script>
+<script type="module">
+import { db } from "../login/firebase.js";
+import { collection, addDoc, setDoc, doc, getDoc } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
+import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
+import { auth } from "../login/firebase.js";
+
+// Protect page
+onAuthStateChanged(auth, (user) => {
+    if (!user) window.location.href = "../login/";
+});
+
+const urlParams = new URLSearchParams(window.location.search);
+const studentId = urlParams.get("id"); // if editing existing student
+const formTitle = document.getElementById("formTitle");
+
+const fullName = document.getElementById("fullName");
+const admissionNumber = document.getElementById("admissionNumber");
+const UPI = document.getElementById("UPI");
+const studentClass = document.getElementById("class");
+const parentName = document.getElementById("parentName");
+const parentPhone = document.getElementById("parentPhone");
+const photoURL = document.getElementById("photoURL");
+const studentForm = document.getElementById("studentForm");
+
+// If editing, load data
+if (studentId) {
+    formTitle.textContent = "Edit Student";
+    (async () => {
+        const studentDoc = await getDoc(doc(db, "students", studentId));
+        if (studentDoc.exists()) {
+            const s = studentDoc.data();
+            fullName.value = s.fullName;
+            admissionNumber.value = s.admissionNumber;
+            UPI.value = s.UPI;
+            studentClass.value = s.class;
+            parentName.value = s.parentName;
+            parentPhone.value = s.parentPhone;
+            photoURL.value = s.photoURL || "";
+        }
+    })();
+}
+
+// Save form
+studentForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const studentData = {
+        fullName: fullName.value,
+        admissionNumber: admissionNumber.value,
+        UPI: UPI.value,
+        class: studentClass.value,
+        parentName: parentName.value,
+        parentPhone: parentPhone.value,
+        photoURL: photoURL.value || ""
+    };
+
+    if (studentId) {
+        await setDoc(doc(db, "students", studentId), studentData);
+        alert("Student updated successfully!");
+    } else {
+        await addDoc(collection(db, "students"), studentData);
+        alert("Student added successfully!");
+    }
+    window.location.href = "manage-students.html";
+});
+</script>
+</body>
+</html>
