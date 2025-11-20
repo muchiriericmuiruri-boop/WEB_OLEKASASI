@@ -1,10 +1,14 @@
-// login.js — handles login using Firebase Authentication (V12 MODULE STYLE)
 import { auth } from "./firebase.js";
 import { signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
 
-// MAIN LOGIN FUNCTION
+// ---- ADMIN LOGIN SETTINGS ----
+const adminEmail = "samuelmusyoki@school.com"; 
+const adminPassword = "315573301031871"; 
+const adminPage = "../admin/index.html";  // <-- Your admin main page
+// -------------------------------------
+
 export async function loginUser() {
-    const username = document.getElementById("username").value.trim().toLowerCase();
+    const email = document.getElementById("username").value.trim().toLowerCase();
     const password = document.getElementById("password").value.trim();
 
     const loginMessage = document.getElementById("loginMessage");
@@ -13,47 +17,33 @@ export async function loginUser() {
     loginMessage.style.display = "none";
     loginSuccess.style.display = "none";
 
-    if (!username || !password) {
+    if (!email || !password) {
         loginMessage.style.display = "block";
-        loginMessage.textContent = "Please enter username and password.";
+        loginMessage.textContent = "Please enter email and password.";
         return;
     }
 
-    // Convert raw username → email format
-    const email = username + "@school.com";
+    // Validate admin login
+    if (email !== adminEmail || password !== adminPassword) {
+        loginMessage.style.display = "block";
+        loginMessage.textContent = "Incorrect admin username or password.";
+        return;
+    }
 
     try {
-        await signInWithEmailAndPassword(auth, email, password);
+        // Firebase authentication
+        await signInWithEmailAndPassword(auth, adminEmail, adminPassword);
 
         loginSuccess.style.display = "block";
         loginSuccess.textContent = "Login successful! Redirecting...";
 
-        // REDIRECT BASED ON USERNAME
-        if (username === "samuelmusyoki") {
-            window.location.href = "../admin/admin-official.html";
-        } 
-        else if (username === "schooladmin") {
-            window.location.href = "../admin/admin-school.html";
-        }
-        else if (username.startsWith("teacher")) {
-            window.location.href = "../admin/admin-teacher.html";
-        }
-        else if (username.startsWith("student")) {
-            window.location.href = "../dashboard/dashboard-student.html";
-        }
-        else if (username.startsWith("parent")) {
-            window.location.href = "../dashboard/dashboard-parent.html";
-        }
-        else {
-            window.location.href = "../dashboard/index.html";
-        }
+        window.location.href = adminPage;
 
     } catch (error) {
         loginMessage.style.display = "block";
-        loginMessage.textContent = "Invalid username or password.";
+        loginMessage.textContent = "Login failed. Check credentials.";
         console.log(error);
     }
 }
 
-// Attach function to window so HTML button can find it
 window.loginUser = loginUser;
