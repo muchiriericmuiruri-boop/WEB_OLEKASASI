@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Send Fees Info - Admin</title>
+<style>
+body {
+    font-family: Arial,sans-serif;
+    margin:0;
+    background:#f4f4f4;
+}
+header {
+    background:#001f3f;
+    color:white;
+    padding:15px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+main {
+    padding:20px;
+    max-width:600px;
+    margin:auto;
+    background:white;
+    margin-top:20px;
+    border-radius:8px;
+    box-shadow:0 0 10px rgba(0,0,0,0.2);
+}
+input, textarea, select {
+    width:100%;
+    padding:10px;
+    margin:10px 0;
+    border-radius:5px;
+    border:1px solid #ccc;
+}
+button {
+    padding:10px 16px;
+    border:none;
+    border-radius:5px;
+    background:#001f3f;
+    color:white;
+    cursor:pointer;
+}
+button:hover { background:#003366; }
+label { font-weight:bold; display:block; margin-top:10px; }
+</style>
+</head>
+<body>
+
+<header>
+<h1>Send Fees Info</h1>
+<button onclick="logoutUser()">Logout</button>
+</header>
+
+<main>
+<h2>Send Fees Details</h2>
+
+<form id="feesForm">
+    <label for="studentSelect">Select Student</label>
+    <select id="studentSelect" required>
+        <option value="">-- Select a Student --</option>
+    </select>
+
+    <label for="amount">Amount</label>
+    <input type="number" id="amount" placeholder="Enter fees amount" required>
+
+    <label for="dueDate">Due Date</label>
+    <input type="date" id="dueDate" required>
+
+    <label for="message">Optional Message</label>
+    <textarea id="message" placeholder="Any additional notes..." rows="4"></textarea>
+
+    <button type="submit">Send Fees Info</button>
+</form>
+</main>
+
+<script type="module" src="../login/firebase.js"></script>
+<script type="module">
+import { db } from "../login/firebase.js";
+import { auth } from "../login/firebase.js";
+import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
+import { collection, getDocs, setDoc, doc } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
+
+// Protect page
+onAuthStateChanged(auth, (user) => {
+    if (!user) window.location.href = "../login/";
+});
+
+const studentSelect = document.getElementById("studentSelect");
+const feesForm = document.getElementById("feesForm");
+
+// Load students for selection
+async function loadStudents() {
+    const studentsCol = collection(db, "students");
+    const snapshot = await getDocs(studentsCol);
+
+    snapshot.docs.forEach((studentDoc) => {
+        const student = studentDoc.data();
+        const option = document.createElement("option");
+        option.value = studentDoc.id;
+        option.textContent = `${student.fullName} (${student.admissionNumber})`;
+        studentSelect.appendChild(option);
+    });
+}
+loadStudents();
+
+// Send fees info
+feesForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const studentId = studentSelect.value;
+    const amount = parseFloat(document.getElementById("amount").value);
+    const dueDate = document.getElementById("dueDate").value;
+    const message = document.getElementById("message").value;
+
+    if (!studentId) return alert("Please select a student.");
+
+    // Save to Firestore under 'fees' collection
+    const feesDocRef = doc(db, "fees", `${studentId}_${Date.now()}`);
+    await setDoc(feesDocRef, {
+        studentID: studentId,
+        amount,
+        dueDate,
+        message,
+        timestamp: new Date()
+    });
+
+    alert("Fees info sent successfully!");
+    feesForm.reset();
+});
+</script>
+
+</body>
+</html>
