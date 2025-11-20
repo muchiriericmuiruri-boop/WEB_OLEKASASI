@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Olekasasi School Portal</title>
+    <title>Login - Olekasasi Portal</title>
     <style>
         body {
             margin: 0;
@@ -15,33 +15,76 @@
             align-items: center;
             height: 100vh;
             color: white;
-            text-align: center;
         }
-        .box {
-            background: rgba(0,0,0,0.4);
+        .login-box {
+            background: rgba(0,0,0,0.5);
             padding: 40px;
             border-radius: 10px;
+            text-align: center;
+            width: 320px;
         }
-        a {
-            display: inline-block;
-            margin-top: 20px;
-            padding: 12px 25px;
+        h2 {
+            margin-bottom: 30px;
+        }
+        input {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            margin: 15px 0;
+            border-radius: 5px;
+            border: none;
+        }
+        button {
+            padding: 12px 20px;
             background: white;
             color: #001f3f;
-            text-decoration: none;
-            font-size: 18px;
+            border: none;
             border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 16px;
         }
-        a:hover {
+        button:hover {
             background: #ccc;
+        }
+        .message {
+            margin-top: 15px;
+            color: #ffdddd;
         }
     </style>
 </head>
 <body>
-    <div class="box">
-        <h1>Welcome to Olekasasi Mixed Day Secondary Portal</h1>
-        <p>Click below to open the Login Page</p>
-        <a href="login/">Go to Login</a>
+    <div class="login-box">
+        <h2>Login to Olekasasi Portal</h2>
+        <form id="loginForm">
+            <input type="email" id="email" placeholder="Email" required>
+            <input type="password" id="password" placeholder="Password" required>
+            <button type="submit">Login</button>
+        </form>
+        <div class="message" id="message"></div>
     </div>
+
+    <!-- Firebase JS -->
+    <script src="firebase.js"></script>
+    <script src="main.js"></script>
+
+    <script>
+        // Optional: Basic front-end handling for form
+        const loginForm = document.getElementById('loginForm');
+        const message = document.getElementById('message');
+
+        loginForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            // Here you can call your Firebase login function from main.js
+            // Example:
+            // firebaseLogin(email, password).catch(err => message.textContent = err.message);
+
+            message.textContent = "Login function will be handled by Firebase!";
+        });
+    </script>
 </body>
 </html>
