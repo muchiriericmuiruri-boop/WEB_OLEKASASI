@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Manage Theme & Logo - Admin</title>
+<style>
+body {
+    font-family: Arial,sans-serif;
+    margin:0;
+    background:#f4f4f4;
+}
+header {
+    background:#001f3f;
+    color:white;
+    padding:15px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+main {
+    padding:20px;
+    max-width:600px;
+    margin:auto;
+    background:white;
+    margin-top:20px;
+    border-radius:8px;
+    box-shadow:0 0 10px rgba(0,0,0,0.2);
+}
+input[type="color"], input[type="url"] {
+    width:100%;
+    padding:10px;
+    margin:10px 0;
+    border-radius:5px;
+    border:1px solid #ccc;
+}
+button {
+    padding:10px 16px;
+    border:none;
+    border-radius:5px;
+    background:#001f3f;
+    color:white;
+    cursor:pointer;
+}
+button:hover { background:#003366; }
+label { font-weight:bold; display:block; margin-top:10px; }
+</style>
+</head>
+<body>
+
+<header>
+<h1>Manage Theme & Logo</h1>
+<button onclick="logoutUser()">Logout</button>
+</header>
+
+<main>
+<h2>Customize Website Appearance</h2>
+
+<form id="themeForm">
+    <label for="primaryColor">Primary Color</label>
+    <input type="color" id="primaryColor" required>
+
+    <label for="secondaryColor">Secondary Color</label>
+    <input type="color" id="secondaryColor" required>
+
+    <label for="logoURL">School Logo URL</label>
+    <input type="url" id="logoURL" placeholder="Enter image URL" required>
+
+    <button type="submit">Save Changes</button>
+</form>
+</main>
+
+<script type="module" src="../login/firebase.js"></script>
+<script type="module">
+import { db } from "../login/firebase.js";
+import { doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
+import { auth } from "../login/firebase.js";
+import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
+
+// Protect page
+onAuthStateChanged(auth, (user) => {
+    if (!user) window.location.href = "../login/";
+});
+
+const primaryInput = document.getElementById("primaryColor");
+const secondaryInput = document.getElementById("secondaryColor");
+const logoInput = document.getElementById("logoURL");
+const form = document.getElementById("themeForm");
+
+const themeDocRef = doc(db, "settings", "theme");
+
+// Load current theme
+(async () => {
+    const docSnap = await getDoc(themeDocRef);
+    if (docSnap.exists()) {
+        const data = docSnap.data();
+        primaryInput.value = data.primaryColor || "#001f3f";
+        secondaryInput.value = data.secondaryColor || "#800000";
+        logoInput.value = data.logoURL || "";
+    }
+})();
+
+// Save theme changes
+form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const themeData = {
+        primaryColor: primaryInput.value,
+        secondaryColor: secondaryInput.value,
+        logoURL: logoInput.value
+    };
+    await setDoc(themeDocRef, themeData);
+    alert("Theme and logo updated successfully!");
+    // Optionally reload or apply changes dynamically
+});
+</script>
+
+</body>
+</html>
