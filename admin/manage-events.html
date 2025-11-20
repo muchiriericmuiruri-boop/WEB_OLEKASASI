@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Manage Events - Admin</title>
+<style>
+body {
+    font-family: Arial,sans-serif;
+    margin:0;
+    background:#f4f4f4;
+}
+header {
+    background:#001f3f;
+    color:white;
+    padding:15px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+main {
+    padding:20px;
+    max-width:800px;
+    margin:auto;
+    background:white;
+    margin-top:20px;
+    border-radius:8px;
+    box-shadow:0 0 10px rgba(0,0,0,0.2);
+}
+input, textarea {
+    width:100%;
+    padding:10px;
+    margin:10px 0;
+    border-radius:5px;
+    border:1px solid #ccc;
+}
+button {
+    padding:10px 16px;
+    border:none;
+    border-radius:5px;
+    background:#001f3f;
+    color:white;
+    cursor:pointer;
+}
+button:hover { background:#003366; }
+label { font-weight:bold; display:block; margin-top:10px; }
+table { width:100%; border-collapse: collapse; margin-top:20px; }
+th, td { padding:12px; border:1px solid #ccc; text-align:center; }
+th { background:#001f3f; color:white; }
+</style>
+</head>
+<body>
+
+<header>
+<h1>Manage Events</h1>
+<button onclick="logoutUser()">Logout</button>
+</header>
+
+<main>
+<h2>Create New Event</h2>
+
+<form id="eventForm">
+    <label for="title">Event Title</label>
+    <input type="text" id="title" placeholder="Enter event title" required>
+
+    <label for="description">Event Description</label>
+    <textarea id="description" placeholder="Enter event description" rows="4"></textarea>
+
+    <label for="date">Event Date</label>
+    <input type="date" id="date" required>
+
+    <button type="submit">Post Event</button>
+</form>
+
+<h2>Existing Events</h2>
+<table>
+<thead>
+<tr>
+<th>Title</th>
+<th>Description</th>
+<th>Date</th>
+<th>Actions</th>
+</tr>
+</thead>
+<tbody id="eventsTable"></tbody>
+</table>
+</main>
+
+<script type="module" src="../login/firebase.js"></script>
+<script type="module">
+import { db } from "../login/firebase.js";
+import { auth } from "../login/firebase.js";
+import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
+import { collection, getDocs, setDoc, doc, deleteDoc } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
+
+// Protect page
+onAuthStateChanged(auth, (user) => {
+    if (!user) window.location.href = "../login/";
+});
+
+const eventForm = document.getElementById("eventForm");
+const eventsTable = document.getElementById("eventsTable");
+
+// Load existing events
+async function loadEvents() {
+    const eventsCol = collection(db, "events");
+    const snapshot = await getDocs(eventsCol);
+    eventsTable.innerHTML = "";
+
+    snapshot.docs.forEach((eventDoc) => {
+        const event = eventDoc.data();
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+        <td>${event.title}</td>
+        <td>${event.description || ''}</td>
+        <td>${event.date}</td>
+        <td>
+            <button onclick="deleteEvent('${eventDoc.id}')">Delete</button>
+        </td>
+        `;
+        eventsTable.appendChild(tr);
+    });
+}
+
+// Delete event
+window.deleteEvent = async (id) => {
+    if (confirm("Are you sure you want to delete this event?")) {
+        await deleteDoc(doc(db, "events", id));
+        loadEvents();
+    }
+}
+
+// Create new event
+eventForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const title = document.getElementById("title").value.trim();
+    const description = document.getElementById("description").value.trim();
+    const date = document.getElementById("date").value;
+
+    if (!title || !date) return alert("Please fill in title and date.");
+
+    const newEventRef = doc(db, "events", `${Date.now()}`);
+    await setDoc(newEventRef, { title, description, date, timestamp: new Date() });
+
+    alert("Event posted successfully!");
+    eventForm.reset();
+    loadEvents();
+});
+
+// Initial load
+loadEvents();
+</script>
+
+</body>
+</html>
