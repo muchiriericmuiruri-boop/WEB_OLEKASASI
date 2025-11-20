@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Teacher Form - Admin</title>
+<style>
+body { font-family: Arial,sans-serif; background:#f4f4f4; margin:0; padding:20px; }
+form { background:white; padding:20px; border-radius:8px; max-width:500px; margin:auto; }
+input, select { width:100%; padding:10px; margin:10px 0; border-radius:5px; border:1px solid #ccc; }
+button { padding:10px 16px; border:none; border-radius:5px; background:#001f3f; color:white; cursor:pointer; }
+button:hover { background:#003366; }
+</style>
+</head>
+<body>
+
+<h2 id="formTitle">Add New Teacher</h2>
+
+<form id="teacherForm">
+  <input type="text" id="fullName" placeholder="Full Name" required>
+  <input type="email" id="email" placeholder="Email" required>
+  <input type="text" id="subject" placeholder="Subject" required>
+  <input type="text" id="assignedClasses" placeholder="Assigned Classes (comma-separated)">
+  <input type="url" id="photoURL" placeholder="Photo URL">
+  <button type="submit">Save Teacher</button>
+</form>
+
+<script type="module" src="../login/firebase.js"></script>
+<script type="module">
+import { db } from "../login/firebase.js";
+import { collection, addDoc, setDoc, doc, getDoc } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
+import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
+import { auth } from "../login/firebase.js";
+
+// Protect page
+onAuthStateChanged(auth, (user) => {
+    if (!user) window.location.href = "../login/";
+});
+
+const urlParams = new URLSearchParams(window.location.search);
+const teacherId = urlParams.get("id");
+const formTitle = document.getElementById("formTitle");
+
+const fullName = document.getElementById("fullName");
+const email = document.getElementById("email");
+const subject = document.getElementById("subject");
+const assignedClasses = document.getElementById("assignedClasses");
+const photoURL = document.getElementById("photoURL");
+const teacherForm = document.getElementById("teacherForm");
+
+// If editing, load data
+if (teacherId) {
+    formTitle.textContent = "Edit Teacher";
+    (async () => {
+        const teacherDoc = await getDoc(doc(db, "teachers", teacherId));
+        if (teacherDoc.exists()) {
+            const t = teacherDoc.data();
+            fullName.value = t.fullName;
+            email.value = t.email;
+            subject.value = t.subject;
+            assignedClasses.value = t.assignedClasses.join(", ");
+            photoURL.value = t.photoURL || "";
+        }
+    })();
+}
+
+// Save form
+teacherForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const teacherData = {
+        fullName: fullName.value,
+        email: email.value,
+        subject: subject.value,
+        assignedClasses: assignedClasses.value.split(",").map(c => c.trim()),
+        photoURL: photoURL.value || ""
+    };
+
+    if (teacherId) {
+        await setDoc(doc(db, "teachers", teacherId), teacherData);
+        alert("Teacher updated successfully!");
+    } else {
+        await addDoc(collection(db, "teachers"), teacherData);
+        alert("Teacher added successfully!");
+    }
+    window.location.href = "manage-teachers.html";
+});
+</script>
+</body>
+</html>
