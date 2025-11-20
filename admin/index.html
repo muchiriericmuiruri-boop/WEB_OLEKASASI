@@ -5,78 +5,27 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Admin Dashboard - Olekasasi Portal</title>
 <style>
-body {
-    margin:0;
-    font-family: Arial,sans-serif;
-    background: linear-gradient(135deg,#001f3f,#800000);
-    color:white;
-}
-header {
-    background: rgba(0,0,0,0.6);
-    padding: 20px;
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-}
+body { margin:0; font-family: Arial,sans-serif; background: linear-gradient(135deg,#001f3f,#800000); color:white; }
+header { background: rgba(0,0,0,0.6); padding: 20px; display:flex; justify-content:space-between; align-items:center; }
 header h1 { margin:0; font-size:22px; }
-button {
-    padding:10px 16px;
-    border:none;
-    border-radius:5px;
-    cursor:pointer;
-    background:white;
-    color:#001f3f;
-}
+button { padding:10px 16px; border:none; border-radius:5px; cursor:pointer; background:white; color:#001f3f; }
 button:hover { background:#ccc; }
-nav {
-    background: rgba(0,0,0,0.4);
-    padding:20px;
-    display:flex;
-    gap:15px;
-    flex-wrap:wrap;
-    justify-content:center;
-}
-nav a {
-    padding:12px 20px;
-    text-decoration:none;
-    color:#001f3f;
-    background:white;
-    border-radius:5px;
-    font-weight:bold;
-}
+nav { background: rgba(0,0,0,0.4); padding:20px; display:flex; gap:15px; flex-wrap:wrap; justify-content:center; }
+nav a { padding:12px 20px; text-decoration:none; color:#001f3f; background:white; border-radius:5px; font-weight:bold; }
 nav a:hover { background:#ccc; }
 main { padding:40px; text-align:center; }
 #dashboardSummary { margin-top:50px; text-align:center; }
 #dashboardSummary h3 { margin-bottom:20px; }
-#searchResult {
-    margin-top:30px;
-    padding:20px;
-    display:none;
-    background:white;
-    color:black;
-    width:60%;
-    margin:auto;
-    border-radius:10px;
-    text-align:left;
-}
+#searchResult { margin-top:30px; padding:20px; display:none; background:white; color:black; width:60%; margin:auto; border-radius:10px; text-align:left; }
 #searchResult img { width:100px; height:100px; border-radius:5px; display:block; margin-bottom:10px; }
-form input, form select, form button {
-    display:block;
-    margin:10px auto;
-    padding:10px;
-    width:60%;
-    border-radius:5px;
-    border:none;
-}
-form button { background:#001f3f; color:white; cursor:pointer; }
-form button:hover { background:#800000; }
-#addUserResult { margin-top:10px; color:yellow; }
+#userList { margin-top:20px; text-align:left; width:80%; margin:auto; }
+#userList input, #userList select { padding:5px; margin:5px 0; width:80%; }
 </style>
 </head>
 <body>
 
 <header>
-    <h1>Admin Official Dashboard</h1>
+    <h1>Admin Dashboard</h1>
     <button id="logoutBtn">Logout</button>
 </header>
 
@@ -89,38 +38,17 @@ form button:hover { background:#800000; }
 </nav>
 
 <main>
-<h2>Welcome, Admin Official!</h2>
-<p>Use the navigation above to manage students, teachers, school theme, fees, and events.</p>
+<h2>Welcome, Admin!</h2>
 
-<!-- SEARCH SECTION -->
+<!-- SEARCH STUDENTS -->
 <div style="margin-top:40px; text-align:center;">
     <h3>Search Student</h3>
-    <input id="searchInput" type="text" placeholder="Enter Name or Admission Number">
+    <input id="searchInput" type="text" placeholder="Enter Name or Admission Number" style="padding:10px;width:60%;border-radius:5px;border:none;">
     <button onclick="searchStudent()">Search</button>
 </div>
-
-<!-- SEARCH RESULT CARD -->
 <div id="searchResult"></div>
 
-<!-- ADD USER SECTION -->
-<div style="margin-top:50px; text-align:center;">
-    <h3>Add New User</h3>
-    <form id="addUserForm">
-        <input type="text" id="newUsername" placeholder="Username" required>
-        <input type="email" id="newUserEmail" placeholder="Email" required>
-        <input type="password" id="newUserPassword" placeholder="Password" required>
-        <select id="newUserRole" required>
-            <option value="">Select Role</option>
-            <option value="admin">Admin</option>
-            <option value="teacher">Teacher</option>
-            <option value="student">Student</option>
-        </select>
-        <button type="submit">Add User</button>
-    </form>
-    <div id="addUserResult"></div>
-</div>
-
-<!-- SUMMARY SECTION -->
+<!-- SUMMARY -->
 <div id="dashboardSummary">
   <h3>School Summary</h3>
   <p>Total Students: <span id="totalStudents">0</span></p>
@@ -129,109 +57,187 @@ form button:hover { background:#800000; }
   <p>Total Teachers: <span id="totalTeachers">0</span></p>
 </div>
 
-<!-- Firebase + Main JS -->
+<!-- ADD NEW USER -->
+<div style="margin-top:50px; text-align:center;">
+  <h3>Add New User</h3>
+  <input type="email" id="newUserEmail" placeholder="Email" style="padding:5px;width:60%;"><br>
+  <input type="text" id="newUsername" placeholder="Username" style="padding:5px;width:60%;"><br>
+  <input type="password" id="newUserPassword" placeholder="Password" style="padding:5px;width:60%;"><br>
+  <select id="newUserRole" style="padding:5px;width:60%;">
+      <option value="student">Student</option>
+      <option value="teacher">Teacher</option>
+      <option value="admin">Admin</option>
+  </select><br>
+  <button onclick="addUser()">Add User</button>
+  <div id="addUserMessage"></div>
+</div>
+
+<!-- MANAGE USERS -->
+<div style="margin-top:50px; text-align:center;">
+  <h3>Manage Users</h3>
+  <button onclick="loadUsers()">Load Users</button>
+  <div id="userList"></div>
+</div>
+
+</main>
+
 <script type="module">
 import { auth, db } from "./firebase.js";
-import { createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
-import { setDoc, doc } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
+import { createUserWithEmailAndPassword, updatePassword } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
+import { collection, getDocs, doc, setDoc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
 
-// =================== DASHBOARD SUMMARY ===================
-function updateSummary() {
-    const students = JSON.parse(localStorage.getItem("students") || "[]");
-    let male = 0, female = 0;
-    students.forEach(s => {
-        if(s.gender){
-            if(s.gender.toLowerCase() === 'male') male++;
-            if(s.gender.toLowerCase() === 'female') female++;
-        }
-    });
+// Logout
+document.getElementById("logoutBtn").addEventListener("click", () => {
+    window.location.href = "login/index.html";
+});
 
-    document.getElementById("totalStudents").textContent = students.length;
-    document.getElementById("maleStudents").textContent = male;
-    document.getElementById("femaleStudents").textContent = female;
-
-    const teachers = JSON.parse(localStorage.getItem("teachers") || "[]");
-    document.getElementById("totalTeachers").textContent = teachers.length;
-}
-
-updateSummary();
-window.addEventListener('storage', updateSummary);
-
-// =================== SEARCH STUDENT ===================
-function searchStudent() {
-    const searchValue = document.getElementById("searchInput").value.trim().toLowerCase();
-    if (!searchValue) {
-        alert("Please enter a name or admission number.");
-        return;
-    }
-
-    const students = JSON.parse(localStorage.getItem("students") || "[]");
-
-    const found = students.find(s =>
-        (s.name && s.name.toLowerCase().includes(searchValue)) ||
-        (s.admission && s.admission.toLowerCase() === searchValue)
-    );
-
-    const resultBox = document.getElementById("searchResult");
-
-    if (!found) {
-        resultBox.style.display = "block";
-        resultBox.innerHTML = `<h3>No student found</h3><p>Try another name or admission number.</p>`;
-        return;
-    }
-
-    resultBox.style.display = "block";
-    resultBox.innerHTML = `
-        <img src="${found.photo || ''}" alt="${found.name}">
-        <p><strong>Name:</strong> ${found.name || 'N/A'}</p>
-        <p><strong>Admission Number:</strong> ${found.admission || 'N/A'}</p>
-        <p><strong>UPI Number:</strong> ${found.upi || 'N/A'}</p>
-        <p><strong>Parent Name:</strong> ${found.parent || 'N/A'}</p>
-        <p><strong>Parent Contact:</strong> ${found.phone || 'N/A'}</p>
-        <p><strong>Home Location:</strong> ${found.location || 'N/A'}</p>
-        <p><strong>Date of Birth:</strong> ${found.dob || 'N/A'}</p>
-        <p><strong>Gender:</strong> ${found.gender || 'N/A'}</p>
-    `;
-}
-
-// =================== ADD USER ===================
-document.getElementById("addUserForm").addEventListener("submit", async function(e){
-    e.preventDefault();
-    const username = document.getElementById("newUsername").value.trim();
+// Add New User
+async function addUser() {
     const email = document.getElementById("newUserEmail").value.trim();
+    const username = document.getElementById("newUsername").value.trim();
     const password = document.getElementById("newUserPassword").value.trim();
     const role = document.getElementById("newUserRole").value;
+    const msgDiv = document.getElementById("addUserMessage");
 
-    if(!username || !email || !password || !role){
-        alert("Fill all fields!");
+    if (!email || !username || !password) {
+        msgDiv.textContent = "Fill all fields!";
+        msgDiv.style.color = "red";
         return;
     }
 
     try {
-        // Create user in Firebase Auth
         const userCredential = await createUserWithEmailAndPassword(auth, email, password);
         const uid = userCredential.user.uid;
 
-        // Save extra info to Firestore
-        await setDoc(doc(db, "users", uid), {
-            username: username,
-            email: email,
-            role: role
+        // Save extra info in Firestore
+        await setDoc(doc(db, "users", uid), { username, email, role });
+        msgDiv.textContent = "User added successfully!";
+        msgDiv.style.color = "green";
+
+        document.getElementById("newUserEmail").value="";
+        document.getElementById("newUsername").value="";
+        document.getElementById("newUserPassword").value="";
+    } catch (error) {
+        msgDiv.textContent = error.message;
+        msgDiv.style.color = "red";
+        console.error(error);
+    }
+}
+
+// Load users
+async function loadUsers() {
+    const userListDiv = document.getElementById("userList");
+    userListDiv.innerHTML = "Loading...";
+    try {
+        const querySnapshot = await getDocs(collection(db, "users"));
+        if(querySnapshot.empty) { userListDiv.innerHTML="<p>No users found</p>"; return; }
+        userListDiv.innerHTML = "";
+        querySnapshot.forEach((docSnap)=>{
+            const user = docSnap.data();
+            const uid = docSnap.id;
+            const div = document.createElement("div");
+            div.style.border="1px solid #ccc";
+            div.style.padding="10px";
+            div.style.marginBottom="10px";
+            div.style.borderRadius="5px";
+            div.innerHTML = `
+                <p><strong>Username:</strong> <input type="text" id="username-${uid}" value="${user.username}"></p>
+                <p><strong>Email:</strong> ${user.email}</p>
+                <p><strong>Role:</strong> 
+                  <select id="role-${uid}">
+                    <option value="admin" ${user.role==='admin'?'selected':''}>Admin</option>
+                    <option value="teacher" ${user.role==='teacher'?'selected':''}>Teacher</option>
+                    <option value="student" ${user.role==='student'?'selected':''}>Student</option>
+                  </select>
+                </p>
+                <p><strong>New Password:</strong> <input type="password" id="pass-${uid}" placeholder="Change password"></p>
+                <button onclick="updateUser('${uid}')">Update</button>
+                <button onclick="deleteUser('${uid}')">Delete</button>
+            `;
+            userListDiv.appendChild(div);
         });
-
-        document.getElementById("addUserResult").textContent = `User "${username}" added successfully!`;
-        document.getElementById("addUserForm").reset();
-
     } catch (error) {
         console.error(error);
-        document.getElementById("addUserResult").textContent = `Error: ${error.message}`;
+        userListDiv.innerHTML = `<p style="color:red;">Error loading users: ${error.message}</p>`;
     }
-});
+}
 
-// =================== LOGOUT ===================
-document.getElementById("logoutBtn").addEventListener("click", () => {
-    window.location.href = "login/index.html";
-});
+// Update user (username, role, password)
+async function updateUser(uid){
+    try {
+        const username = document.getElementById(`username-${uid}`).value.trim();
+        const role = document.getElementById(`role-${uid}`).value;
+        const newPass = document.getElementById(`pass-${uid}`).value.trim();
+
+        // Update Firestore
+        await updateDoc(doc(db,"users",uid), { username, role });
+
+        // Update password if provided (needs admin privileges)
+        if(newPass){
+            const user = auth.currentUser;
+            if(user && user.uid===uid){
+                await updatePassword(user, newPass);
+            } else {
+                alert("Password change requires server-side admin privileges (Firebase Admin SDK).");
+            }
+        }
+
+        alert("User updated successfully!");
+        loadUsers();
+    } catch(err){
+        console.error(err);
+        alert("Error updating user: "+err.message);
+    }
+}
+
+// Delete user
+async function deleteUser(uid){
+    if(!confirm("Are you sure? User will lose access!")) return;
+    try{
+        await deleteDoc(doc(db,"users",uid));
+        alert("User removed from Firestore. To fully remove login, use Admin SDK on server.");
+        loadUsers();
+    }catch(err){
+        console.error(err);
+        alert("Error deleting user: "+err.message);
+    }
+}
+
+// ======= STUDENT SEARCH =======
+function searchStudent() {
+    const searchValue = document.getElementById("searchInput").value.trim().toLowerCase();
+    if (!searchValue) { alert("Enter name or admission number"); return; }
+    const students = JSON.parse(localStorage.getItem("students")||"[]");
+    const found = students.find(s=> (s.name&&s.name.toLowerCase().includes(searchValue)) || (s.admission&&s.admission.toLowerCase()===searchValue));
+    const resultBox = document.getElementById("searchResult");
+    if(!found){ resultBox.style.display="block"; resultBox.innerHTML="<p>No student found</p>"; return; }
+    resultBox.style.display="block";
+    resultBox.innerHTML=`
+        <img src="${found.photo||''}" alt="${found.name}">
+        <p><strong>Name:</strong> ${found.name||'N/A'}</p>
+        <p><strong>Admission Number:</strong> ${found.admission||'N/A'}</p>
+        <p><strong>UPI Number:</strong> ${found.upi||'N/A'}</p>
+        <p><strong>Parent Name:</strong> ${found.parent||'N/A'}</p>
+        <p><strong>Parent Contact:</strong> ${found.phone||'N/A'}</p>
+        <p><strong>Home Location:</strong> ${found.location||'N/A'}</p>
+        <p><strong>Date of Birth:</strong> ${found.dob||'N/A'}</p>
+        <p><strong>Gender:</strong> ${found.gender||'N/A'}</p>
+    `;
+}
+
+// Update summary
+function updateSummary(){
+    const students = JSON.parse(localStorage.getItem("students")||"[]");
+    let male=0,female=0;
+    students.forEach(s=>{ if(s.gender){ if(s.gender.toLowerCase()==='male') male++; if(s.gender.toLowerCase()==='female') female++;}});
+    document.getElementById("totalStudents").textContent=students.length;
+    document.getElementById("maleStudents").textContent=male;
+    document.getElementById("femaleStudents").textContent=female;
+    const teachers=JSON.parse(localStorage.getItem("teachers")||"[]");
+    document.getElementById("totalTeachers").textContent=teachers.length;
+}
+updateSummary();
+window.addEventListener('storage',updateSummary);
 </script>
 
 </body>
