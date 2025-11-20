@@ -48,31 +48,6 @@ nav a:hover { background:#ccc; }
 main { padding:40px; text-align:center; }
 #dashboardSummary { margin-top:50px; text-align:center; }
 #dashboardSummary h3 { margin-bottom:20px; }
-#searchSection { margin-top:50px; }
-#searchSection input {
-    padding:10px;
-    width:250px;
-    margin-right:10px;
-}
-#searchSection button {
-    padding:10px 20px;
-}
-#searchResults {
-    margin-top:20px;
-    color:black;
-    background:white;
-    padding:15px;
-    border-radius:10px;
-    text-align:left;
-    color:#001f3f;
-}
-#searchResults img {
-    width:80px;
-    height:80px;
-    border-radius:5px;
-    vertical-align:middle;
-    margin-right:15px;
-}
 </style>
 </head>
 <body>
@@ -94,6 +69,23 @@ main { padding:40px; text-align:center; }
 <h2>Welcome, Admin Official!</h2>
 <p>Use the navigation above to manage students, teachers, school theme, fees, and events.</p>
 
+<!-- ========== SEARCH SECTION ========== -->
+<div style="margin-top:40px; text-align:center;">
+    <h3>Search Student</h3>
+    <input id="searchInput" type="text" placeholder="Enter Name or Admission Number" 
+           style="padding:10px;width:60%;border-radius:5px;border:none;">
+    <button onclick="searchStudent()" 
+            style="padding:10px 16px;margin-left:10px;border:none;border-radius:5px;">
+            Search
+    </button>
+</div>
+
+<!-- SEARCH RESULT CARD -->
+<div id="searchResult" 
+     style="margin-top:30px; padding:20px; display:none; background:white; color:black; width:60%; margin:auto; border-radius:10px;">
+</div>
+
+<!-- ========== SUMMARY SECTION ========== -->
 <div id="dashboardSummary">
   <h3>School Summary</h3>
   <p>Total Students: <span id="totalStudents">0</span></p>
@@ -102,18 +94,10 @@ main { padding:40px; text-align:center; }
   <p>Total Teachers: <span id="totalTeachers">0</span></p>
 </div>
 
-<!-- SEARCH SECTION -->
-<div id="searchSection">
-  <h3>Search Student</h3>
-  <input type="text" id="searchInput" placeholder="Enter student name or admission number">
-  <button id="searchBtn">Search</button>
-  <div id="searchResults"></div>
-</div>
-
 </main>
 
 <script>
-// Load students and teachers from localStorage
+// Load students and teachers from localStorage (or replace with Firestore later)
 function updateSummary() {
     const students = JSON.parse(localStorage.getItem("students") || "[]");
     let male = 0, female = 0;
@@ -134,45 +118,55 @@ function updateSummary() {
 
 // Update summary when page loads
 updateSummary();
+
+// Listen for changes in localStorage to auto-update dashboard
 window.addEventListener('storage', updateSummary);
+
+// ================= SEARCH FUNCTION ===================
+function searchStudent() {
+    const searchValue = document.getElementById("searchInput").value.trim().toLowerCase();
+
+    if (!searchValue) {
+        alert("Please enter a name or admission number.");
+        return;
+    }
+
+    const students = JSON.parse(localStorage.getItem("students") || "[]");
+
+    // Find by name OR admission number
+    const found = students.find(s =>
+        (s.name && s.name.toLowerCase().includes(searchValue)) ||
+        (s.admission && s.admission.toLowerCase() === searchValue)
+    );
+
+    const resultBox = document.getElementById("searchResult");
+
+    if (!found) {
+        resultBox.style.display = "block";
+        resultBox.innerHTML = `
+            <h3>No student found</h3>
+            <p>Try another name or admission number.</p>
+        `;
+        return;
+    }
+
+    // Display full student details
+    resultBox.style.display = "block";
+    resultBox.innerHTML = `
+        <h3>Student Information</h3>
+        <p><strong>Name:</strong> ${found.name || 'N/A'}</p>
+        <p><strong>Admission Number:</strong> ${found.admission || 'N/A'}</p>
+        <p><strong>Gender:</strong> ${found.gender || 'N/A'}</p>
+        <p><strong>Class:</strong> ${found.class || 'N/A'}</p>
+        <p><strong>D.O.B:</strong> ${found.dob || 'N/A'}</p>
+        <p><strong>Parent:</strong> ${found.parent || 'N/A'}</p>
+        <p><strong>Phone:</strong> ${found.phone || 'N/A'}</p>
+    `;
+}
 
 // Logout button
 document.getElementById("logoutBtn").addEventListener("click", () => {
     window.location.href = "login/index.html";
-});
-
-// SEARCH FUNCTIONALITY
-document.getElementById("searchBtn").addEventListener("click", () => {
-    const query = document.getElementById("searchInput").value.trim().toLowerCase();
-    const students = JSON.parse(localStorage.getItem("students") || "[]");
-    const resultsDiv = document.getElementById("searchResults");
-    resultsDiv.innerHTML = "";
-
-    if (!query) {
-        resultsDiv.textContent = "Please enter a name or admission number.";
-        return;
-    }
-
-    const matches = students.filter(s => 
-        s.name.toLowerCase().includes(query) || 
-        s.admission.toLowerCase().includes(query)
-    );
-
-    if(matches.length === 0) {
-        resultsDiv.textContent = "No students found.";
-        return;
-    }
-
-    matches.forEach(s => {
-        const div = document.createElement("div");
-        div.innerHTML = `
-            <img src="${s.photo}" alt="${s.name}">
-            <strong>Name:</strong> ${s.name}<br>
-            <strong>Admission No:</strong> ${s.admission}<br>
-            <strong>Gender:</strong> ${s.gender}
-        `;
-        resultsDiv.appendChild(div);
-    });
 });
 </script>
 
