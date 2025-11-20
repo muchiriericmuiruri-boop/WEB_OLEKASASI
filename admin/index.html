@@ -1,14 +1,3 @@
-<script type="module">
-import { auth } from "../login/firebase.js";
-import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
-
-onAuthStateChanged(auth, (user) => {
-    if (!user) {
-        window.location.href = "../login/index.html";
-    }
-});
-</script>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -16,13 +5,45 @@ onAuthStateChanged(auth, (user) => {
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Admin Dashboard - Olekasasi Portal</title>
 <style>
-body { margin:0; font-family: Arial,sans-serif; background:linear-gradient(135deg,#001f3f,#800000); color:white; }
-header { background: rgba(0,0,0,0.6); padding: 20px; display:flex; justify-content:space-between; align-items:center; }
+body {
+    margin:0;
+    font-family: Arial,sans-serif;
+    background: linear-gradient(135deg,#001f3f,#800000);
+    color:white;
+}
+header {
+    background: rgba(0,0,0,0.6);
+    padding: 20px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
 header h1 { margin:0; font-size:22px; }
-button { padding:10px 16px; border:none; border-radius:5px; cursor:pointer; background:white; color:#001f3f; }
+button {
+    padding:10px 16px;
+    border:none;
+    border-radius:5px;
+    cursor:pointer;
+    background:white;
+    color:#001f3f;
+}
 button:hover { background:#ccc; }
-nav { background: rgba(0,0,0,0.4); padding:20px; display:flex; gap:15px; flex-wrap:wrap; justify-content:center; }
-nav a { padding:12px 20px; text-decoration:none; color:#001f3f; background:white; border-radius:5px; font-weight:bold; }
+nav {
+    background: rgba(0,0,0,0.4);
+    padding:20px;
+    display:flex;
+    gap:15px;
+    flex-wrap:wrap;
+    justify-content:center;
+}
+nav a {
+    padding:12px 20px;
+    text-decoration:none;
+    color:#001f3f;
+    background:white;
+    border-radius:5px;
+    font-weight:bold;
+}
 nav a:hover { background:#ccc; }
 main { padding:40px; text-align:center; }
 </style>
@@ -30,8 +51,8 @@ main { padding:40px; text-align:center; }
 <body>
 
 <header>
-<h1>Admin Official Dashboard</h1>
-<button onclick="logoutUser()">Logout</button>
+    <h1>Admin Official Dashboard</h1>
+    <button id="logoutBtn">Logout</button>
 </header>
 
 <nav>
@@ -40,8 +61,6 @@ main { padding:40px; text-align:center; }
   <a href="manage-theme.html">Change Theme / Logo</a>
   <a href="send-fees.html">Send Fees Info</a>
   <a href="events.html">Manage Events</a>
- <a href="manage-students.html">Manage Students</a>
-
 </nav>
 
 <main>
@@ -49,15 +68,24 @@ main { padding:40px; text-align:center; }
 <p>Use the navigation above to manage students, teachers, school theme, fees, and events.</p>
 </main>
 
+<!-- Firebase + Main JS -->
 <script type="module" src="../login/firebase.js"></script>
 <script type="module" src="../login/main.js"></script>
 <script type="module">
 import { auth } from "../login/firebase.js";
-import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
+import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
 
 // Protect page
 onAuthStateChanged(auth, (user) => {
-    if (!user) window.location.href = "../login/";
+    if (!user) {
+        window.location.href = "../login/";
+    }
+});
+
+// Logout button
+document.getElementById("logoutBtn").addEventListener("click", async () => {
+    await signOut(auth);
+    window.location.href = "../login/";
 });
 </script>
 
