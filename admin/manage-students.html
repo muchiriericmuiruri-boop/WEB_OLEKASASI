@@ -26,7 +26,7 @@
         cursor: pointer;
     }
     form button:hover { background: #800000; }
-    #studentsList img { border-radius: 5px; margin-right: 10px; }
+    #studentsList img { border-radius: 5px; margin-right: 10px; vertical-align: middle; }
     #studentsList li { margin: 10px 0; list-style: none; }
     #studentsList button {
         margin-left: 10px;
@@ -47,6 +47,11 @@
     <form id="studentForm">
         <input type="text" id="studentName" placeholder="Student Name" required>
         <input type="text" id="admissionNumber" placeholder="Admission Number" required>
+        <input type="text" id="upiNumber" placeholder="UPI Number" required>
+        <input type="text" id="parentName" placeholder="Parent Name" required>
+        <input type="text" id="parentContact" placeholder="Parent Contact" required>
+        <input type="text" id="homeLocation" placeholder="Home Location" required>
+        <input type="date" id="dob" placeholder="Date of Birth" required>
         <select id="studentGender" required>
             <option value="">Select Gender</option>
             <option value="male">Male</option>
@@ -77,11 +82,16 @@
 
         const name = document.getElementById("studentName").value.trim();
         const admission = document.getElementById("admissionNumber").value.trim();
+        const upi = document.getElementById("upiNumber").value.trim();
+        const parentName = document.getElementById("parentName").value.trim();
+        const parentContact = document.getElementById("parentContact").value.trim();
+        const homeLocation = document.getElementById("homeLocation").value.trim();
+        const dob = document.getElementById("dob").value;
         const gender = document.getElementById("studentGender").value;
         const photoFile = document.getElementById("studentPhoto").files[0];
 
-        if (!name || !admission || !photoFile || !gender) {
-            formMessage.textContent = "Please fill all fields and select a photo and gender.";
+        if (!name || !admission || !upi || !parentName || !parentContact || !homeLocation || !dob || !gender || !photoFile) {
+            formMessage.textContent = "Please fill all fields and select a photo.";
             return;
         }
 
@@ -92,6 +102,11 @@
             const newStudent = {
                 name,
                 admission,
+                upi,
+                parentName,
+                parentContact,
+                homeLocation,
+                dob,
                 gender,
                 photo: photoData
             };
@@ -113,7 +128,8 @@
             const li = document.createElement("li");
             li.innerHTML = `
                 <img src="${s.photo}" alt="${s.name}" width="50" height="50">
-                ${s.name} - ${s.admission} (${s.gender})
+                <strong>${s.name}</strong> - Admission: ${s.admission} - UPI: ${s.upi} - Gender: ${s.gender}<br>
+                Parent: ${s.parentName} (${s.parentContact}) - Home: ${s.homeLocation} - DOB: ${s.dob}
                 <button onclick="deleteStudent(${index})">Delete</button>
             `;
             studentListUl.appendChild(li);
