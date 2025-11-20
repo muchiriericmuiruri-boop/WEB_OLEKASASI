@@ -1,10 +1,11 @@
+// login.js — handles login using Firebase Authentication (V12 MODULE STYLE)
 import { auth } from "./firebase.js";
 import { signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
 
 // ---- ADMIN LOGIN SETTINGS ----
 const adminEmail = "samuelmusyoki@school.com"; 
 const adminPassword = "315573301031871"; 
-const adminPage = "../admin/index.html";  // <-- Your admin main page
+const adminPage = "../admin/index.html";  // <-- Your main admin page
 // -------------------------------------
 
 export async function loginUser() {
@@ -23,27 +24,44 @@ export async function loginUser() {
         return;
     }
 
-    // Validate admin login
-    if (email !== adminEmail || password !== adminPassword) {
-        loginMessage.style.display = "block";
-        loginMessage.textContent = "Incorrect admin username or password.";
-        return;
-    }
-
     try {
-        // Firebase authentication
-        await signInWithEmailAndPassword(auth, adminEmail, adminPassword);
+        // ---- ADMIN LOGIN ----
+        if (email === adminEmail && password === adminPassword) {
+            await signInWithEmailAndPassword(auth, adminEmail, adminPassword);
+
+            loginSuccess.style.display = "block";
+            loginSuccess.textContent = "Admin login successful! Redirecting...";
+
+            // Redirect to main admin dashboard
+            window.location.href = adminPage;
+            return;
+        }
+
+        // ---- OTHER USERS ----
+        // Users with Firebase-auth accounts (students, teachers, parents)
+        await signInWithEmailAndPassword(auth, email, password);
 
         loginSuccess.style.display = "block";
         loginSuccess.textContent = "Login successful! Redirecting...";
 
-        window.location.href = adminPage;
+        // Redirect based on email patterns
+        if (email.startsWith("teacher")) {
+            window.location.href = "../dashboard/dashboard-teacher.html";
+        } else if (email.startsWith("student")) {
+            window.location.href = "../dashboard/dashboard-student.html";
+        } else if (email.startsWith("parent")) {
+            window.location.href = "../dashboard/dashboard-parent.html";
+        } else {
+            // default fallback
+            window.location.href = "../dashboard/index.html";
+        }
 
     } catch (error) {
         loginMessage.style.display = "block";
-        loginMessage.textContent = "Login failed. Check credentials.";
+        loginMessage.textContent = "Invalid username or password.";
         console.log(error);
     }
 }
 
+// Attach function to window so HTML can call it
 window.loginUser = loginUser;
