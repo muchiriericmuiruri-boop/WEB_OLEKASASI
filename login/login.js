@@ -1,5 +1,4 @@
 // login.js — handles login using Firebase Authentication (V12 MODULE STYLE)
-
 import { auth } from "./firebase.js";
 import { signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
 
@@ -58,4 +57,3 @@ export async function loginUser() {
 
 // Attach function to window so HTML button can find it
 window.loginUser = loginUser;
-
