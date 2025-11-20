@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Admin Dashboard - Olekasasi Portal</title>
-
 <style>
 body {
     margin:0;
@@ -20,7 +19,6 @@ header {
     align-items:center;
 }
 header h1 { margin:0; font-size:22px; }
-
 button {
     padding:10px 16px;
     border:none;
@@ -30,7 +28,6 @@ button {
     color:#001f3f;
 }
 button:hover { background:#ccc; }
-
 nav {
     background: rgba(0,0,0,0.4);
     padding:20px;
@@ -48,38 +45,23 @@ nav a {
     font-weight:bold;
 }
 nav a:hover { background:#ccc; }
-
 main { padding:40px; text-align:center; }
-
+#dashboardSummary { margin-top:50px; text-align:center; }
+#dashboardSummary h3 { margin-bottom:20px; }
 #searchResult {
-    margin-top:30px; 
-    padding:20px; 
-    display:none; 
-    background:white; 
-    color:black; 
-    width:70%; 
-    margin:auto; 
+    margin-top:30px;
+    padding:20px;
+    display:none;
+    background:white;
+    color:black;
+    width:60%;
+    margin:auto;
     border-radius:10px;
+    text-align:left;
 }
-
-.action-btn {
-    padding:10px 14px;
-    margin:5px;
-    border:none;
-    border-radius:5px;
-    cursor:pointer;
-    font-weight:bold;
-}
-
-.edit-btn { background:#007bff; color:white; }
-.delete-btn { background:#cc0000; color:white; }
-.print-btn { background:#008000; color:white; }
-.photo-btn { background:#ff9900; color:white; }
-
-.action-btn:hover { opacity:0.8; }
+#searchResult img { width:100px; height:100px; border-radius:5px; display:block; margin-bottom:10px; }
 </style>
 </head>
-
 <body>
 
 <header>
@@ -96,124 +78,98 @@ main { padding:40px; text-align:center; }
 </nav>
 
 <main>
+<h2>Welcome, Admin Official!</h2>
+<p>Use the navigation above to manage students, teachers, school theme, fees, and events.</p>
 
-<h2>Search Student (Admin Full Access)</h2>
-
-<input id="searchInput" type="text"
-       placeholder="Enter Name or Admission Number"
-       style="padding:10px;width:60%;border-radius:5px;border:none;">
-
-<button onclick="searchStudent()" 
-        style="padding:10px 16px;margin-left:10px;border:none;border-radius:5px;">
-        Search
-</button>
+<!-- SEARCH SECTION -->
+<div style="margin-top:40px; text-align:center;">
+    <h3>Search Student</h3>
+    <input id="searchInput" type="text" placeholder="Enter Name or Admission Number" 
+           style="padding:10px;width:60%;border-radius:5px;border:none;">
+    <button onclick="searchStudent()" 
+            style="padding:10px 16px;margin-left:10px;border:none;border-radius:5px;">
+            Search
+    </button>
+</div>
 
 <!-- SEARCH RESULT CARD -->
 <div id="searchResult"></div>
 
+<!-- SUMMARY SECTION -->
+<div id="dashboardSummary">
+  <h3>School Summary</h3>
+  <p>Total Students: <span id="totalStudents">0</span></p>
+  <p>Male Students: <span id="maleStudents">0</span></p>
+  <p>Female Students: <span id="femaleStudents">0</span></p>
+  <p>Total Teachers: <span id="totalTeachers">0</span></p>
+</div>
+
 </main>
 
 <script>
-// ================= SEARCH FUNCTION ===================
+// Update dashboard summary
+function updateSummary() {
+    const students = JSON.parse(localStorage.getItem("students") || "[]");
+    let male = 0, female = 0;
+    students.forEach(s => {
+        if(s.gender){
+            if(s.gender.toLowerCase() === 'male') male++;
+            if(s.gender.toLowerCase() === 'female') female++;
+        }
+    });
+
+    document.getElementById("totalStudents").textContent = students.length;
+    document.getElementById("maleStudents").textContent = male;
+    document.getElementById("femaleStudents").textContent = female;
+
+    const teachers = JSON.parse(localStorage.getItem("teachers") || "[]");
+    document.getElementById("totalTeachers").textContent = teachers.length;
+}
+
+// Update summary on page load
+updateSummary();
+window.addEventListener('storage', updateSummary);
+
+// SEARCH FUNCTION
 function searchStudent() {
-    const value = document.getElementById("searchInput").value.trim().toLowerCase();
-    if (!value) return alert("Enter name or admission number");
+    const searchValue = document.getElementById("searchInput").value.trim().toLowerCase();
+    if (!searchValue) {
+        alert("Please enter a name or admission number.");
+        return;
+    }
 
     const students = JSON.parse(localStorage.getItem("students") || "[]");
 
+    // Find by name OR admission number
     const found = students.find(s =>
-        (s.name && s.name.toLowerCase().includes(value)) ||
-        (s.admission && s.admission.toLowerCase() === value)
+        (s.name && s.name.toLowerCase().includes(searchValue)) ||
+        (s.admission && s.admission.toLowerCase() === searchValue)
     );
 
     const resultBox = document.getElementById("searchResult");
 
     if (!found) {
         resultBox.style.display = "block";
-        resultBox.innerHTML = `<h3>No student found.</h3>`;
+        resultBox.innerHTML = `<h3>No student found</h3><p>Try another name or admission number.</p>`;
         return;
     }
 
-    // ========== SHOW FULL DETAILS ==========
+    // Display full student info
     resultBox.style.display = "block";
     resultBox.innerHTML = `
-        <h2>Student Details</h2>
-
+        <img src="${found.photo || ''}" alt="${found.name}">
         <p><strong>Name:</strong> ${found.name || 'N/A'}</p>
         <p><strong>Admission Number:</strong> ${found.admission || 'N/A'}</p>
-        <p><strong>Gender:</strong> ${found.gender || 'N/A'}</p>
-        <p><strong>Class:</strong> ${found.class || 'N/A'}</p>
-        <p><strong>D.O.B:</strong> ${found.dob || 'N/A'}</p>
+        <p><strong>UPI Number:</strong> ${found.upi || 'N/A'}</p>
         <p><strong>Parent Name:</strong> ${found.parent || 'N/A'}</p>
-        <p><strong>Phone:</strong> ${found.phone || 'N/A'}</p>
-        <p><strong>KCPE Marks:</strong> ${found.kcpe || 'N/A'}</p>
-        <p><strong>Address:</strong> ${found.address || 'N/A'}</p>
-        <p><strong>Religion:</strong> ${found.religion || 'N/A'}</p>
-
-        <h3>Actions</h3>
-
-        <button class="action-btn edit-btn" onclick="editStudent('${found.admission}')">
-            ✏️ Edit Student
-        </button>
-
-        <button class="action-btn delete-btn" onclick="deleteStudent('${found.admission}')">
-            🗑️ Delete Student
-        </button>
-
-        <button class="action-btn photo-btn" onclick="showPhoto('${found.photo || ''}')">
-            📸 Show Student Photo
-        </button>
-
-        <button class="action-btn print-btn" onclick="printStudent('${found.admission}')">
-            🖨️ Print Student Details
-        </button>
+        <p><strong>Parent Contact:</strong> ${found.phone || 'N/A'}</p>
+        <p><strong>Home Location:</strong> ${found.location || 'N/A'}</p>
+        <p><strong>Date of Birth:</strong> ${found.dob || 'N/A'}</p>
+        <p><strong>Gender:</strong> ${found.gender || 'N/A'}</p>
     `;
 }
 
-// ========== EDIT STUDENT ==========
-function editStudent(adm){
-    window.location.href = `edit-student.html?adm=${adm}`;
-}
-
-// ========== DELETE STUDENT ==========
-function deleteStudent(adm){
-    if(!confirm("Are you sure you want to delete this student?")) return;
-
-    let students = JSON.parse(localStorage.getItem("students") || "[]");
-    students = students.filter(s => s.admission !== adm);
-    localStorage.setItem("students", JSON.stringify(students));
-
-    alert("Student deleted successfully!");
-    location.reload();
-}
-
-// ========== SHOW PHOTO ==========
-function showPhoto(photo){
-    if(!photo) return alert("No photo available for this student.");
-    const win = window.open("");
-    win.document.write(`<img src="${photo}" style="width:100%;border-radius:10px;">`);
-}
-
-// ========== PRINT STUDENT ==========
-function printStudent(adm){
-    const students = JSON.parse(localStorage.getItem("students") || "[]");
-    const s = students.find(st => st.admission === adm);
-    if(!s) return;
-
-    const win = window.open("", "PrintWindow");
-    win.document.write(`
-        <h1>Student Details - ${s.name}</h1>
-        <p><strong>Admission:</strong> ${s.admission}</p>
-        <p><strong>Class:</strong> ${s.class}</p>
-        <p><strong>Gender:</strong> ${s.gender}</p>
-        <p><strong>DOB:</strong> ${s.dob}</p>
-        <p><strong>Parent:</strong> ${s.parent}</p>
-        <p><strong>Phone:</strong> ${s.phone}</p>
-    `);
-    win.print();
-}
-
-// LOGOUT
+// Logout button
 document.getElementById("logoutBtn").addEventListener("click", () => {
     window.location.href = "login/index.html";
 });
