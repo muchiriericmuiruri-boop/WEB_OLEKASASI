@@ -64,26 +64,32 @@
         <div class="message" id="message"></div>
     </div>
 
-    <!-- Firebase JS -->
-    <script src="firebase.js"></script>
-    <script src="main.js"></script>
+    <!-- Firebase and main JS (module) -->
+    <script type="module">
+        import { auth } from './firebase.js';
+        import { signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
 
-    <script>
-        // Optional: Basic front-end handling for form
         const loginForm = document.getElementById('loginForm');
         const message = document.getElementById('message');
 
-        loginForm.addEventListener('submit', (e) => {
+        loginForm.addEventListener('submit', async (e) => {
             e.preventDefault();
 
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
 
-            // Here you can call your Firebase login function from main.js
-            // Example:
-            // firebaseLogin(email, password).catch(err => message.textContent = err.message);
-
-            message.textContent = "Login function will be handled by Firebase!";
+            try {
+                const userCredential = await signInWithEmailAndPassword(auth, email, password);
+                message.style.color = 'lightgreen';
+                message.textContent = "Login successful! Redirecting...";
+                // Redirect after login
+                setTimeout(() => {
+                    window.location.href = '../index.html'; // or dashboard page
+                }, 1500);
+            } catch (error) {
+                message.style.color = 'red';
+                message.textContent = error.message;
+            }
         });
     </script>
 </body>
