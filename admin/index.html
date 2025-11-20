@@ -66,6 +66,14 @@ main { padding:40px; text-align:center; }
 <main>
 <h2>Welcome, Admin Official!</h2>
 <p>Use the navigation above to manage students, teachers, school theme, fees, and events.</p>
+    <div id="dashboardSummary" style="margin-top:50px; text-align:center;">
+  <h3>School Summary</h3>
+  <p>Total Students: <span id="totalStudents">0</span></p>
+  <p>Male Students: <span id="maleStudents">0</span></p>
+  <p>Female Students: <span id="femaleStudents">0</span></p>
+  <p>Total Teachers: <span id="totalTeachers">0</span></p>
+</div>
+
 </main>
 
 <!-- Firebase + Main JS -->
@@ -87,6 +95,33 @@ document.getElementById("logoutBtn").addEventListener("click", async () => {
     await signOut(auth);
     window.location.href = "../login/";
 });
+</script>
+<script type="module">
+// Load students and teachers from localStorage (or replace with Firestore later)
+function updateSummary() {
+    // Students
+    const students = JSON.parse(localStorage.getItem("students") || "[]");
+    let male = 0;
+    let female = 0;
+    students.forEach(s => {
+        // Assuming student objects have gender: 'male' or 'female'
+        if(s.gender) {
+            if(s.gender.toLowerCase() === 'male') male++;
+            if(s.gender.toLowerCase() === 'female') female++;
+        }
+    });
+
+    document.getElementById("totalStudents").textContent = students.length;
+    document.getElementById("maleStudents").textContent = male;
+    document.getElementById("femaleStudents").textContent = female;
+
+    // Teachers
+    const teachers = JSON.parse(localStorage.getItem("teachers") || "[]");
+    document.getElementById("totalTeachers").textContent = teachers.length;
+}
+
+// Update summary when page loads
+updateSummary();
 </script>
 
 </body>
