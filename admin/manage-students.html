@@ -69,79 +69,78 @@
 </div>
 
 <script>
-    const studentForm = document.getElementById("studentForm");
-    const formMessage = document.getElementById("formMessage");
-    const studentListUl = document.getElementById("studentListUl");
+const studentForm = document.getElementById("studentForm");
+const formMessage = document.getElementById("formMessage");
+const studentListUl = document.getElementById("studentListUl");
 
-    // Load existing students from localStorage
-    let students = JSON.parse(localStorage.getItem("students") || "[]");
-    renderStudentList();
+// Load existing students from localStorage
+let students = JSON.parse(localStorage.getItem("students") || "[]");
+renderStudentList();
 
-    studentForm.addEventListener("submit", (e) => {
-        e.preventDefault();
+studentForm.addEventListener("submit", (e) => {
+    e.preventDefault();
 
-        const name = document.getElementById("studentName").value.trim();
-        const admission = document.getElementById("admissionNumber").value.trim();
-        const upi = document.getElementById("upiNumber").value.trim();
-        const parentName = document.getElementById("parentName").value.trim();
-        const parentContact = document.getElementById("parentContact").value.trim();
-        const homeLocation = document.getElementById("homeLocation").value.trim();
-        const dob = document.getElementById("dob").value;
-        const gender = document.getElementById("studentGender").value;
-        const photoFile = document.getElementById("studentPhoto").files[0];
+    const studentData = {
+        name: document.getElementById("studentName").value.trim(),
+        admission: document.getElementById("admissionNumber").value.trim(),
+        upi: document.getElementById("upiNumber").value.trim(),
+        parentName: document.getElementById("parentName").value.trim(),
+        parentContact: document.getElementById("parentContact").value.trim(),
+        homeLocation: document.getElementById("homeLocation").value.trim(),
+        dob: document.getElementById("dob").value,
+        gender: document.getElementById("studentGender").value,
+        photoFile: document.getElementById("studentPhoto").files[0]
+    };
 
-        if (!name || !admission || !upi || !parentName || !parentContact || !homeLocation || !dob || !gender || !photoFile) {
+    // Validate all fields
+    for (const key in studentData) {
+        if (!studentData[key]) {
             formMessage.textContent = "Please fill all fields and select a photo.";
             return;
         }
-
-        const reader = new FileReader();
-        reader.onload = function() {
-            const photoData = reader.result; // Base64 image string
-
-            const newStudent = {
-                name,
-                admission,
-                upi,
-                parentName,
-                parentContact,
-                homeLocation,
-                dob,
-                gender,
-                photo: photoData
-            };
-
-            students.push(newStudent);
-            localStorage.setItem("students", JSON.stringify(students));
-            renderStudentList();
-
-            formMessage.textContent = "Student added successfully!";
-            studentForm.reset();
-        };
-
-        reader.readAsDataURL(photoFile); // convert image to base64
-    });
-
-    function renderStudentList() {
-        studentListUl.innerHTML = "";
-        students.forEach((s, index) => {
-            const li = document.createElement("li");
-            li.innerHTML = `
-                <img src="${s.photo}" alt="${s.name}" width="50" height="50">
-                <strong>${s.name}</strong> - Admission: ${s.admission} - UPI: ${s.upi} - Gender: ${s.gender}<br>
-                Parent: ${s.parentName} (${s.parentContact}) - Home: ${s.homeLocation} - DOB: ${s.dob}
-                <button onclick="deleteStudent(${index})">Delete</button>
-            `;
-            studentListUl.appendChild(li);
-        });
     }
 
-    // Delete student
-    window.deleteStudent = function(index) {
-        students.splice(index, 1);
+    const reader = new FileReader();
+    reader.onload = function() {
+        const photoData = reader.result;
+
+        const newStudent = { ...studentData, photo: photoData };
+        delete newStudent.photoFile; // Remove raw file reference
+
+        students.push(newStudent);
         localStorage.setItem("students", JSON.stringify(students));
         renderStudentList();
+
+        // Trigger storage event for dashboard update
+        window.dispatchEvent(new Event('storage'));
+
+        formMessage.textContent = "Student added successfully!";
+        studentForm.reset();
     };
+
+    reader.readAsDataURL(studentData.photoFile);
+});
+
+function renderStudentList() {
+    studentListUl.innerHTML = "";
+    students.forEach((s, index) => {
+        const li = document.createElement("li");
+        li.innerHTML = `
+            <img src="${s.photo}" alt="${s.name}" width="50" height="50">
+            ${s.name} - ${s.admission} - UPI: ${s.upi} - ${s.gender} - Parent: ${s.parentName} (${s.parentContact}) - Home: ${s.homeLocation} - DOB: ${s.dob}
+            <button onclick="deleteStudent(${index})">Delete</button>
+        `;
+        studentListUl.appendChild(li);
+    });
+}
+
+// Delete student
+window.deleteStudent = function(index) {
+    students.splice(index, 1);
+    localStorage.setItem("students", JSON.stringify(students));
+    renderStudentList();
+    window.dispatchEvent(new Event('storage')); // update dashboard
+};
 </script>
 
 </body>
