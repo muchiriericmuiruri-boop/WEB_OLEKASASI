@@ -3,125 +3,133 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Admin Dashboard - Olekasasi Portal</title>
+<title>Manage Students - Admin</title>
 <style>
-body {
-    margin:0;
-    font-family: Arial,sans-serif;
-    background: linear-gradient(135deg,#001f3f,#800000);
-    color:white;
-}
-header {
-    background: rgba(0,0,0,0.6);
-    padding: 20px;
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-}
-header h1 { margin:0; font-size:22px; }
-button {
-    padding:10px 16px;
-    border:none;
-    border-radius:5px;
-    cursor:pointer;
-    background:white;
-    color:#001f3f;
-}
-button:hover { background:#ccc; }
-nav {
-    background: rgba(0,0,0,0.4);
-    padding:20px;
-    display:flex;
-    gap:15px;
-    flex-wrap:wrap;
-    justify-content:center;
-}
-nav a {
-    padding:12px 20px;
-    text-decoration:none;
-    color:#001f3f;
-    background:white;
-    border-radius:5px;
-    font-weight:bold;
-}
-nav a:hover { background:#ccc; }
-main { padding:40px; text-align:center; }
+    body {
+        font-family: Arial, sans-serif;
+        background: #f0f0f0;
+        margin: 0;
+        padding: 20px;
+        color: #333;
+    }
+    h2, h3 { color: #001f3f; }
+    form input, form select, form button {
+        display: block;
+        margin: 10px 0;
+        padding: 10px;
+        width: 300px;
+    }
+    form button {
+        background: #001f3f;
+        color: white;
+        border: none;
+        cursor: pointer;
+    }
+    form button:hover { background: #800000; }
+    #studentsList img { border-radius: 5px; margin-right: 10px; vertical-align: middle; }
+    #studentsList li { margin: 10px 0; list-style: none; }
+    #studentsList button {
+        margin-left: 10px;
+        padding: 3px 7px;
+        background: #800000;
+        color: white;
+        border: none;
+        cursor: pointer;
+    }
 </style>
 </head>
 <body>
 
-<header>
-    <h1>Admin Official Dashboard</h1>
-    <button id="logoutBtn">Logout</button>
-</header>
+<h2>Admin - Manage Students</h2>
 
-<nav>
-  <a href="manage-students.html">Manage Students</a>
-  <a href="manage-teachers.html">Manage Teachers</a>
-  <a href="manage-theme.html">Change Theme / Logo</a>
-  <a href="send-fees.html">Send Fees Info</a>
-  <a href="events.html">Manage Events</a>
-</nav>
-
-<main>
-<h2>Welcome, Admin Official!</h2>
-<p>Use the navigation above to manage students, teachers, school theme, fees, and events.</p>
-    <div id="dashboardSummary" style="margin-top:50px; text-align:center;">
-  <h3>School Summary</h3>
-  <p>Total Students: <span id="totalStudents">0</span></p>
-  <p>Male Students: <span id="maleStudents">0</span></p>
-  <p>Female Students: <span id="femaleStudents">0</span></p>
-  <p>Total Teachers: <span id="totalTeachers">0</span></p>
+<div id="add-student">
+    <h3>Add Student</h3>
+    <form id="studentForm">
+        <input type="text" id="studentName" placeholder="Student Name" required>
+        <input type="text" id="admissionNumber" placeholder="Admission Number" required>
+        <select id="studentGender" required>
+            <option value="">Select Gender</option>
+            <option value="male">Male</option>
+            <option value="female">Female</option>
+        </select>
+        <input type="file" id="studentPhoto" accept="image/*" required>
+        <button type="submit">Add Student</button>
+    </form>
+    <div id="formMessage"></div>
 </div>
 
-</main>
+<div id="studentsList">
+    <h3>Student List</h3>
+    <ul id="studentListUl"></ul>
+</div>
 
-<!-- Firebase + Main JS -->
-<script type="module" src="../login/firebase.js"></script>
-<script type="module" src="../login/main.js"></script>
-<script type="module">
-import { auth } from "../login/firebase.js";
-import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
+<script>
+    const studentForm = document.getElementById("studentForm");
+    const formMessage = document.getElementById("formMessage");
+    const studentListUl = document.getElementById("studentListUl");
 
-// Protect page
-onAuthStateChanged(auth, (user) => {
-    if (!user) {
-        window.location.href = "../login/";
-    }
-});
+    // Load existing students from localStorage
+    let students = JSON.parse(localStorage.getItem("students") || "[]");
+    renderStudentList();
 
-// Logout button
-document.getElementById("logoutBtn").addEventListener("click", async () => {
-    await signOut(auth);
-    window.location.href = "../login/";
-});
-</script>
-<script type="module">
-// Load students and teachers from localStorage (or replace with Firestore later)
-function updateSummary() {
-    // Students
-    const students = JSON.parse(localStorage.getItem("students") || "[]");
-    let male = 0;
-    let female = 0;
-    students.forEach(s => {
-        // Assuming student objects have gender: 'male' or 'female'
-        if(s.gender) {
-            if(s.gender.toLowerCase() === 'male') male++;
-            if(s.gender.toLowerCase() === 'female') female++;
+    studentForm.addEventListener("submit", (e) => {
+        e.preventDefault();
+
+        const name = document.getElementById("studentName").value.trim();
+        const admission = document.getElementById("admissionNumber").value.trim();
+        const gender = document.getElementById("studentGender").value;
+        const photoFile = document.getElementById("studentPhoto").files[0];
+
+        if (!name || !admission || !gender || !photoFile) {
+            formMessage.textContent = "Please fill all fields and select a photo.";
+            return;
         }
+
+        const reader = new FileReader();
+        reader.onload = function() {
+            const photoData = reader.result; // Base64 image string
+
+            const newStudent = {
+                name,
+                admission,
+                gender,
+                photo: photoData
+            };
+
+            students.push(newStudent);
+            localStorage.setItem("students", JSON.stringify(students));
+            renderStudentList();
+
+            // Trigger storage event for dashboard update
+            window.dispatchEvent(new Event('storage'));
+
+            formMessage.textContent = "Student added successfully!";
+            studentForm.reset();
+        };
+
+        reader.readAsDataURL(photoFile); // convert image to base64
     });
 
-    document.getElementById("totalStudents").textContent = students.length;
-    document.getElementById("maleStudents").textContent = male;
-    document.getElementById("femaleStudents").textContent = female;
+    function renderStudentList() {
+        studentListUl.innerHTML = "";
+        students.forEach((s, index) => {
+            const li = document.createElement("li");
+            li.innerHTML = `
+                <img src="${s.photo}" alt="${s.name}" width="50" height="50">
+                ${s.name} - ${s.admission} - ${s.gender}
+                <button onclick="deleteStudent(${index})">Delete</button>
+            `;
+            studentListUl.appendChild(li);
+        });
+    }
 
-    // Teachers
-    const teachers = JSON.parse(localStorage.getItem("teachers") || "[]");
-    document.getElementById("totalTeachers").textContent = teachers.length;
-}
-
-// Update summary when page loads
-updateSummary();
+    // Delete student
+    window.deleteStudent = function(index) {
+        students.splice(index, 1);
+        localStorage.setItem("students", JSON.stringify(students));
+        renderStudentList();
+        window.dispatchEvent(new Event('storage')); // update dashboard
+    };
 </script>
 
 </body>
