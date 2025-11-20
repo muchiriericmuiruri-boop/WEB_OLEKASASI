@@ -48,7 +48,7 @@ nav a:hover { background:#ccc; }
 main { padding:40px; text-align:center; }
 #dashboardSummary { margin-top:50px; text-align:center; }
 #dashboardSummary h3 { margin-bottom:20px; }
-#searchResult {
+#searchResult, #addUserResult {
     margin-top:30px;
     padding:20px;
     display:none;
@@ -60,6 +60,15 @@ main { padding:40px; text-align:center; }
     text-align:left;
 }
 #searchResult img { width:100px; height:100px; border-radius:5px; display:block; margin-bottom:10px; }
+form input, form select {
+    display:block;
+    margin:10px 0;
+    padding:10px;
+    width: 60%;
+    border-radius:5px;
+    border:none;
+}
+form button { margin-top:10px; }
 </style>
 </head>
 <body>
@@ -84,12 +93,8 @@ main { padding:40px; text-align:center; }
 <!-- SEARCH SECTION -->
 <div style="margin-top:40px; text-align:center;">
     <h3>Search Student</h3>
-    <input id="searchInput" type="text" placeholder="Enter Name or Admission Number" 
-           style="padding:10px;width:60%;border-radius:5px;border:none;">
-    <button onclick="searchStudent()" 
-            style="padding:10px 16px;margin-left:10px;border:none;border-radius:5px;">
-            Search
-    </button>
+    <input id="searchInput" type="text" placeholder="Enter Name or Admission Number">
+    <button onclick="searchStudent()">Search</button>
 </div>
 
 <!-- SEARCH RESULT CARD -->
@@ -102,6 +107,24 @@ main { padding:40px; text-align:center; }
   <p>Male Students: <span id="maleStudents">0</span></p>
   <p>Female Students: <span id="femaleStudents">0</span></p>
   <p>Total Teachers: <span id="totalTeachers">0</span></p>
+</div>
+
+<!-- ADD USER ACCOUNT SECTION -->
+<div style="margin-top:50px; text-align:center;">
+    <h3>Add New User Account</h3>
+    <form id="addUserForm">
+        <input type="text" id="newUsername" placeholder="Username" required>
+        <input type="email" id="newUserEmail" placeholder="Email" required>
+        <input type="password" id="newUserPassword" placeholder="Password" required>
+        <select id="newUserRole" required>
+            <option value="">Select Role</option>
+            <option value="teacher">Teacher</option>
+            <option value="staff">Staff</option>
+            <option value="admin">Admin</option>
+        </select>
+        <button type="submit">Add User</button>
+    </form>
+    <div id="addUserResult"></div>
 </div>
 
 </main>
@@ -140,7 +163,6 @@ function searchStudent() {
 
     const students = JSON.parse(localStorage.getItem("students") || "[]");
 
-    // Find by name OR admission number
     const found = students.find(s =>
         (s.name && s.name.toLowerCase().includes(searchValue)) ||
         (s.admission && s.admission.toLowerCase() === searchValue)
@@ -154,7 +176,6 @@ function searchStudent() {
         return;
     }
 
-    // Display full student info
     resultBox.style.display = "block";
     resultBox.innerHTML = `
         <img src="${found.photo || ''}" alt="${found.name}">
@@ -168,6 +189,36 @@ function searchStudent() {
         <p><strong>Gender:</strong> ${found.gender || 'N/A'}</p>
     `;
 }
+
+// ADD USER ACCOUNT FUNCTION
+document.getElementById("addUserForm").addEventListener("submit", function(e) {
+    e.preventDefault();
+    const username = document.getElementById("newUsername").value.trim();
+    const email = document.getElementById("newUserEmail").value.trim();
+    const password = document.getElementById("newUserPassword").value.trim();
+    const role = document.getElementById("newUserRole").value;
+
+    if(!username || !email || !password || !role){
+        alert("Please fill all fields.");
+        return;
+    }
+
+    const users = JSON.parse(localStorage.getItem("users") || "[]");
+
+    // Check if email already exists
+    if(users.some(u => u.email.toLowerCase() === email.toLowerCase())){
+        alert("User with this email already exists.");
+        return;
+    }
+
+    const newUser = {username, email, password, role};
+    users.push(newUser);
+    localStorage.setItem("users", JSON.stringify(users));
+
+    document.getElementById("addUserResult").style.display = "block";
+    document.getElementById("addUserResult").textContent = `User "${username}" added successfully!`;
+    this.reset();
+});
 
 // Logout button
 document.getElementById("logoutBtn").addEventListener("click", () => {
