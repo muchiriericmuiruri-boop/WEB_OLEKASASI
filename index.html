@@ -4,19 +4,200 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Home — Olekasasi School</title>
-  <link rel="stylesheet" href="style.css"> <!-- matches your CSS file -->
+
+  <style>
+    /* COLORS */
+    :root {
+      --maroon: #800000;
+      --navy: #001f3f;
+      --white: #ffffff;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: var(--white);
+      color: var(--navy);
+    }
+
+    /* HEADER */
+    header {
+      background: var(--navy);
+      color: white;
+      padding: 10px 0;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .header-inner {
+      width: 95%;
+      margin: auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    /* LOGO */
+    .school-logo {
+      width: 60px;
+      height: 60px;
+      border-radius: 6px;
+      object-fit: cover;
+      margin-right: 10px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+    }
+
+    .brand h1 {
+      font-size: 18px;
+      margin: 0;
+      color: white;
+    }
+
+    .motto {
+      margin: 0;
+      font-size: 13px;
+      color: #ffdddd;
+    }
+
+    /* NAVIGATION */
+    .main-nav ul {
+      list-style: none;
+      display: flex;
+      padding: 0;
+      margin: 0;
+      gap: 15px;
+    }
+
+    .main-nav a {
+      color: white;
+      text-decoration: none;
+      padding: 8px 10px;
+    }
+
+    .main-nav a:hover,
+    .main-nav .active {
+      background: var(--maroon);
+      border-radius: 5px;
+    }
+
+    /* MOBILE NAV BUTTON */
+    .nav-toggle {
+      font-size: 26px;
+      background: none;
+      border: none;
+      color: white;
+      display: none;
+      cursor: pointer;
+    }
+
+    /* SLIDESHOW */
+    .hero {
+      position: relative;
+      height: 380px;
+      overflow: hidden;
+      text-align: center;
+      color: white;
+    }
+
+    .slideshow-container {
+      height: 100%;
+      width: 100%;
+      position: absolute;
+    }
+
+    .slide img {
+      width: 100%;
+      height: 380px;
+      object-fit: cover;
+    }
+
+    .slide {
+      display: none;
+    }
+
+    .hero-text {
+      position: absolute;
+      top: 35%;
+      width: 100%;
+      text-shadow: 2px 2px 5px black;
+    }
+
+    .hero-text h2 {
+      font-size: 28px;
+    }
+
+    /* SECTIONS */
+    section {
+      padding: 20px;
+      width: 95%;
+      margin: auto;
+      max-width: 1000px;
+    }
+
+    /* FOOTER */
+    footer {
+      background: var(--maroon);
+      color: white;
+      text-align: center;
+      padding: 10px;
+      margin-top: 20px;
+    }
+
+    /* -------------------- RESPONSIVE -------------------- */
+
+    @media (max-width: 900px) {
+      .main-nav {
+        display: none;
+        background: var(--navy);
+        width: 100%;
+      }
+      .main-nav.open {
+        display: block;
+      }
+      .main-nav ul {
+        flex-direction: column;
+        padding: 10px 0;
+      }
+      .nav-toggle {
+        display: block;
+      }
+      .brand h1 {
+        font-size: 16px;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .school-logo {
+        width: 50px;
+        height: 50px;
+      }
+      .hero-text h2 {
+        font-size: 22px;
+      }
+    }
+
+  </style>
+
 </head>
 <body>
+
   <header>
     <div class="header-inner">
       <div class="brand">
-        <img src="school-logo.jpg" alt="Olekasasi Logo" class="school-logo">
+        <img src="logo.jpg" alt="Olekasasi Logo" class="school-logo">
         <div>
           <h1>Olekasasi Mixed Day Secondary School</h1>
           <p class="motto">Strive To Excel</p>
         </div>
       </div>
+
       <button class="nav-toggle" onclick="toggleNav()">☰</button>
+
       <nav class="main-nav" id="mainNav">
         <ul>
           <li><a href="index.html" class="active">Home</a></li>
@@ -25,38 +206,80 @@
           <li><a href="clubs.html">Clubs</a></li>
           <li><a href="gallery.html">Gallery</a></li>
           <li><a href="staff.html">Staff</a></li>
-          <li><a href="contact.html">Contact</a></li> <!-- fixed link -->
-          <li><a href="admissions.html" class="admissions-link">Admissions</a></li>
+          <li><a href="contact.html">Contact</a></li>
+          <li><a href="admissions.html">Admissions</a></li>
           <a href="login/index.html">Login</a>
-
-
-
         </ul>
       </nav>
     </div>
   </header>
 
-  <main>
-    <section class="hero">
+  <!-- HERO WITH SLIDESHOW -->
+  <section class="hero">
+    <div class="slideshow-container">
+
+      <div class="slide fade">
+        <img src="img1.jpg" alt="">
+      </div>
+
+      <div class="slide fade">
+        <img src="img2.jpg" alt="">
+      </div>
+
+      <div class="slide fade">
+        <img src="img3.jpg" alt="">
+      </div>
+
+    </div>
+
+    <div class="hero-text">
       <h2>Welcome to Olekasasi Mixed Day Secondary School</h2>
-      <p>Strive to Excel </p>
-    </section>
+      <p>Strive to Excel</p>
+    </div>
+  </section>
 
-    <section>
-      <h2>About Us</h2>
-      <p>A public Mixed secondary school categorized as C4 under the new Competency-Based Education (CBE) curriculum. We are dedicated to empowering our students through quality education, discipline, and integrity, while providing a safe and supportive environment where every child can discover their potential and thrive.
-
-Browse through our website to learn more about us, from our academic programs and vibrant student life to our achievements and community engagement.</p>
-    </section>
-  </main>
+  <!-- ABOUT -->
+  <section>
+    <h2>About Us</h2>
+    <p>
+      A public Mixed secondary school categorized as C4 under the new Competency-Based Education (CBE) curriculum. 
+      We are dedicated to empowering our students through quality education, discipline, and integrity, while providing 
+      a safe and supportive environment where every child can discover their potential and thrive.
+      <br><br>
+      Browse through our website to learn more about us, from our academic programs and vibrant student life 
+      to our achievements and community engagement.
+    </p>
+  </section>
 
   <footer>
     <p>© 2026 Olekasasi — Strive To Excel</p>
   </footer>
 
-  <script src="script.js"></script>
+  <script>
+    /* SLIDESHOW */
+    let slideIndex = 0;
+    showSlides();
+
+    function showSlides() {
+      let slides = document.getElementsByClassName("slide");
+      
+      for (let i = 0; i < slides.length; i++) {
+        slides[i].style.display = "none";
+      }
+
+      slideIndex++;
+      if (slideIndex > slides.length) { slideIndex = 1 }
+
+      slides[slideIndex - 1].style.display = "block";
+      setTimeout(showSlides, 4000);
+    }
+
+    /* MOBILE NAV */
+    function toggleNav() {
+      const nav = document.getElementById("mainNav");
+      nav.classList.toggle("open");
+    }
+  </script>
+
 </body>
 </html>
-
-
-
