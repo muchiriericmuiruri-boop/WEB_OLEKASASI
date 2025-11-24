@@ -5,12 +5,160 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Academics — Olekasasi School</title>
   <link rel="stylesheet" href="style.css">
+  <style>
+    /* Theme colors */
+    :root {
+      --maroon: #800000;
+      --navy: #001f3f;
+      --white: #ffffff;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: var(--white);
+      color: var(--navy);
+    }
+
+    /* HEADER */
+    header {
+      background: var(--navy);
+      color: var(--white);
+      padding: 10px 0;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .header-inner {
+      width: 95%;
+      margin: auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+    }
+
+    /* SCHOOL LOGO */
+    .school-logo {
+      width: 60px;
+      height: 60px;
+      object-fit: cover;
+      border-radius: 6px;
+      margin-right: 10px;
+    }
+
+    .brand h1 {
+      font-size: 18px;
+      margin: 0;
+      color: var(--white);
+    }
+
+    .motto {
+      margin: 0;
+      font-size: 13px;
+      color: #ffdddd;
+    }
+
+    /* NAVIGATION */
+    .main-nav ul {
+      list-style: none;
+      display: flex;
+      padding: 0;
+      margin: 0;
+      gap: 15px;
+    }
+
+    .main-nav a {
+      color: var(--white);
+      text-decoration: none;
+      padding: 8px 10px;
+    }
+
+    .main-nav a:hover,
+    .main-nav .active {
+      background: var(--maroon);
+      border-radius: 5px;
+    }
+
+    /* MOBILE NAV TOGGLE */
+    .nav-toggle {
+      font-size: 26px;
+      background: none;
+      border: none;
+      color: var(--white);
+      display: none;
+      cursor: pointer;
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 900px) {
+      .main-nav {
+        display: none;
+        background: var(--navy);
+        width: 100%;
+      }
+      .main-nav.open {
+        display: block;
+      }
+      .main-nav ul {
+        flex-direction: column;
+        padding: 10px 0;
+      }
+      .nav-toggle {
+        display: block;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .school-logo {
+        width: 50px;
+        height: 50px;
+      }
+      .brand h1 {
+        font-size: 16px;
+      }
+      .motto {
+        font-size: 12px;
+      }
+    }
+
+    /* MAIN CONTENT */
+    main {
+      padding: 20px;
+      width: 95%;
+      margin: auto;
+      max-width: 1000px;
+    }
+
+    section {
+      margin-bottom: 30px;
+    }
+
+    h2 {
+      color: var(--navy);
+    }
+
+    footer {
+      background: var(--maroon);
+      color: var(--white);
+      text-align: center;
+      padding: 10px;
+      margin-top: 20px;
+    }
+  </style>
 </head>
 <body>
+
   <header>
     <div class="header-inner">
       <div class="brand">
-        <img src="school-logo.jpg" alt="Olekasasi Logo" class="school-logo">
+        <!-- Logo from main-images folder -->
+        <img src="main-images/school-logo.jpg" alt="Olekasasi Logo" class="school-logo">
         <div>
           <h1>Olekasasi Mixed Day Secondary School</h1>
           <p class="motto">Strive To Excel</p>
@@ -27,9 +175,7 @@
           <li><a href="staff.html">Staff</a></li>
           <li><a href="contact.html">Contact</a></li>
           <li><a href="admissions.html" class="admissions-link">Admissions</a></li>
-         <a href="login/index.html">Login</a>
-
-
+          <a href="login/index.html">Login</a>
         </ul>
       </nav>
     </div>
@@ -53,10 +199,16 @@
   </main>
 
   <footer>
-    <p>© 2025 Olekasasi — Strive To Excel</p>
+    <p>© 2026 Olekasasi — Strive To Excel</p>
   </footer>
 
-  <script src="script.js"></script>
+  <script>
+    /* MOBILE NAV TOGGLE */
+    function toggleNav() {
+      const nav = document.getElementById("mainNav");
+      nav.classList.toggle("open");
+    }
+  </script>
+
 </body>
 </html>
-
