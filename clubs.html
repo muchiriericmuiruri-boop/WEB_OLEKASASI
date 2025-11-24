@@ -4,63 +4,206 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Clubs — Olekasasi School</title>
-  <link rel="stylesheet" href="style.css">
+  <style>
+    :root {
+      --maroon: #800000;
+      --navy: #001f3f;
+      --white: #ffffff;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: var(--white);
+      color: var(--navy);
+    }
+
+    header {
+      background: var(--navy);
+      color: var(--white);
+      padding: 10px 0;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .header-inner {
+      width: 95%;
+      margin: auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+    }
+
+    .school-logo {
+      width: 60px;
+      height: 60px;
+      border-radius: 6px;
+      object-fit: cover;
+      margin-right: 10px;
+    }
+
+    .brand h1 {
+      font-size: 18px;
+      margin: 0;
+      color: white;
+    }
+
+    .motto {
+      margin: 0;
+      font-size: 13px;
+      color: #ffdddd;
+    }
+
+    .main-nav ul {
+      list-style: none;
+      display: flex;
+      padding: 0;
+      margin: 0;
+      gap: 15px;
+      flex-wrap: wrap;
+    }
+
+    .main-nav a {
+      color: white;
+      text-decoration: none;
+      padding: 8px 10px;
+    }
+
+    .main-nav a:hover,
+    .main-nav .active {
+      background: var(--maroon);
+      border-radius: 5px;
+    }
+
+    .nav-toggle {
+      font-size: 26px;
+      background: none;
+      border: none;
+      color: white;
+      display: none;
+      cursor: pointer;
+    }
+
+    main {
+      width: 95%;
+      max-width: 1000px;
+      margin: auto;
+      padding: 20px 0;
+    }
+
+    section {
+      margin-bottom: 30px;
+    }
+
+    section ul {
+      padding-left: 20px;
+    }
+
+    section ul li {
+      margin-bottom: 8px;
+    }
+
+    footer {
+      background: var(--maroon);
+      color: white;
+      text-align: center;
+      padding: 10px;
+    }
+
+    @media (max-width: 900px) {
+      .main-nav {
+        display: none;
+        background: var(--navy);
+        width: 100%;
+      }
+      .main-nav.open {
+        display: block;
+      }
+      .main-nav ul {
+        flex-direction: column;
+        padding: 10px 0;
+      }
+      .nav-toggle {
+        display: block;
+      }
+      .brand h1 {
+        font-size: 16px;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .school-logo {
+        width: 50px;
+        height: 50px;
+      }
+    }
+  </style>
 </head>
 <body>
-  <header>
-    <div class="header-inner">
-      <div class="brand">
-        <img src="school-logo.jpg" alt="Olekasasi Logo" class="school-logo">
-        <div>
-          <h1>Olekasasi Mixed Day Secondary School</h1>
-          <p class="motto">Strive To Excel</p>
-        </div>
+
+<header>
+  <div class="header-inner">
+    <div class="brand">
+      <img src="main-images/school-logo.jpg" alt="Olekasasi Logo" class="school-logo">
+      <div>
+        <h1>Olekasasi Mixed Day Secondary School</h1>
+        <p class="motto">Strive To Excel</p>
       </div>
-      <button class="nav-toggle" onclick="toggleNav()">☰</button>
-      <nav class="main-nav" id="mainNav">
-        <ul>
-          <li><a href="index.html">Home</a></li>
-          <li><a href="about.html">About</a></li>
-          <li><a href="academics.html">Academics</a></li>
-          <li><a href="clubs.html" class="active">Clubs</a></li>
-          <li><a href="gallery.html">Gallery</a></li>
-          <li><a href="staff.html">Staff</a></li>
-          <li><a href="contact.html">Contact</a></li>
-          <li><a href="admissions.html" class="admissions-link">Admissions</a></li>
-         <a href="login/index.html">Login</a>
-
-
-        </ul>
-      </nav>
     </div>
-  </header>
-
-  <main>
-    <section>
-      <h2>Our Clubs</h2>
+    <button class="nav-toggle" onclick="toggleNav()">☰</button>
+    <nav class="main-nav" id="mainNav">
       <ul>
-        <li>Scouts Club</li>
-        <li>Music Club</li>
-        <li>Environmental Club</li>
-        <li>Christian Union</li>
-        <li>Y.C.S</li>
-        <li>Muslim Club</li>
-        <li>SDA Club</li>
-        <li>Drama Club</li>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="academics.html">Academics</a></li>
+        <li><a href="clubs.html" class="active">Clubs</a></li>
+        <li><a href="gallery.html">Gallery</a></li>
+        <li><a href="staff.html">Staff</a></li>
+        <li><a href="admissions.html" class="admissions-link">Admissions</a></li>
+        <li><a href="contact.html">Contact</a></li>
+        <a href="login/index.html">Login</a>
       </ul>
-    </section>
+    </nav>
+  </div>
+</header>
 
-    <section>
-      <h2>Club Activities</h2>
-      <p>Each club provides students with opportunities to develop leadership, teamwork, and creativity outside the classroom.</p>
-    </section>
-  </main>
+<main>
+  <section>
+    <h2>Our Clubs</h2>
+    <ul>
+      <li>Scouts Club</li>
+      <li>Music Club</li>
+      <li>Environmental Club</li>
+      <li>Christian Union</li>
+      <li>Y.C.S</li>
+      <li>Muslim Club</li>
+      <li>SDA Club</li>
+      <li>Drama Club</li>
+    </ul>
+  </section>
 
-  <footer>
-    <p>© 2025 Olekasasi — Strive To Excel</p>
-  </footer>
+  <section>
+    <h2>Club Activities</h2>
+    <p>Each club provides students with opportunities to develop leadership, teamwork, and creativity outside the classroom.</p>
+  </section>
+</main>
 
-  <script src="script.js"></script>
+<footer>
+  <p>© 2026 Olekasasi — Strive To Excel</p>
+</footer>
+
+<script>
+  function toggleNav() {
+    document.getElementById("mainNav").classList.toggle("open");
+  }
+</script>
+
 </body>
 </html>
-
