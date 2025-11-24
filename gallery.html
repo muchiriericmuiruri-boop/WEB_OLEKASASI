@@ -4,7 +4,14 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Gallery — Olekasasi School</title>
+
   <style>
+    :root {
+      --maroon: #800000;
+      --navy: #001f3f;
+      --white: #ffffff;
+    }
+
     body {
       font-family: Arial, sans-serif;
       margin: 0;
@@ -13,8 +20,9 @@
       color: #333;
     }
 
+    /* HEADER */
     header {
-      background: #001f3f;
+      background: var(--navy);
       color: white;
       padding: 15px 20px;
       display: flex;
@@ -26,25 +34,14 @@
     .brand {
       display: flex;
       align-items: center;
-      gap: 15px;
+      gap: 12px;
     }
 
     .school-logo {
       width: 60px;
       height: 60px;
       object-fit: cover;
-      border-radius: 10px;
-    }
-
-    .brand h1 {
-      margin: 0;
-      font-size: 20px;
-    }
-
-    .brand .motto {
-      margin: 0;
-      font-size: 14px;
-      font-style: italic;
+      border-radius: 8px;
     }
 
     nav ul {
@@ -54,11 +51,6 @@
       padding: 0;
       margin: 0;
       flex-wrap: wrap;
-      align-items: center;
-    }
-
-    nav ul li {
-      margin: 0;
     }
 
     nav a {
@@ -69,50 +61,73 @@
     }
 
     nav a.active, nav a:hover {
-      background: #800000;
+      background: var(--maroon);
     }
 
+    /* MAIN */
     main {
-      padding: 40px 20px;
+      padding: 30px 20px;
       text-align: center;
     }
 
+    h2 {
+      font-size: 28px;
+      color: var(--navy);
+    }
+
+    /* GALLERY GRID */
     .gallery {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-      gap: 15px;
       margin-top: 30px;
+      display: grid;
+      gap: 18px;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
     }
 
     .gallery img {
       width: 100%;
-      height: 120px;
+      height: 240px;
       object-fit: cover;
-      border-radius: 10px;
-      transition: transform 0.3s, box-shadow 0.3s;
+      border-radius: 12px;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
 
-    /* Hover effects for style variation */
+    /* Different sizes/styles */
+    .gallery img:nth-child(2n) { height: 300px; }
+    .gallery img:nth-child(3n) { height: 260px; }
+    .gallery img:nth-child(5n) { height: 320px; }
+
     .gallery img:hover {
       transform: scale(1.05);
-      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+      box-shadow: 0 10px 18px rgba(0,0,0,0.3);
     }
 
-    /* Different sizes for random style */
-    .gallery img:nth-child(5n) { height: 180px; }
-    .gallery img:nth-child(7n) { height: 200px; }
-    .gallery img:nth-child(3n) { height: 160px; }
-
+    /* FOOTER */
     footer {
-      background: #001f3f;
+      background: var(--maroon);
       color: white;
       text-align: center;
       padding: 15px 0;
       margin-top: 40px;
     }
+
+    /* RESPONSIVE DESIGN */
+    @media (max-width: 600px) {
+      .gallery {
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      }
+      .gallery img {
+        height: 180px;
+      }
+      .gallery img:nth-child(2n) { height: 200px; }
+      .gallery img:nth-child(3n) { height: 220px; }
+      .gallery img:nth-child(5n) { height: 200px; }
+    }
+
   </style>
 </head>
+
 <body>
+
   <header>
     <div class="brand">
       <img src="school-logo.jpg" alt="Olekasasi Logo" class="school-logo">
@@ -121,6 +136,7 @@
         <p class="motto">Strive To Excel</p>
       </div>
     </div>
+
     <nav>
       <ul>
         <li><a href="index.html">Home</a></li>
@@ -130,59 +146,34 @@
         <li><a href="gallery.html" class="active">Gallery</a></li>
         <li><a href="staff.html">Staff</a></li>
         <li><a href="contact.html">Contact</a></li>
-        <li><a href="admissions.html" class="admissions-link">Admissions</a></li>
-       <a href="login/index.html">Login</a>
+        <li><a href="admissions.html">Admissions</a></li>
+        <li><a href="login/index.html">Login</a></li>
       </ul>
     </nav>
   </header>
 
   <main>
     <h2>School Gallery</h2>
+
     <div class="gallery">
-      <!-- 30 placeholder images -->
-      <img src="placeholder1.jpg" alt="Event 1">
-      <img src="placeholder2.jpg" alt="Event 2">
-      <img src="placeholder3.jpg" alt="Event 3">
-      <img src="placeholder4.jpg" alt="Event 4">
-      <img src="placeholder5.jpg" alt="Event 5">
-      <img src="placeholder6.jpg" alt="Event 6">
-      <img src="placeholder7.jpg" alt="Event 7">
-      <img src="placeholder8.jpg" alt="Event 8">
-      <img src="placeholder9.jpg" alt="Event 9">
-      <img src="placeholder10.jpg" alt="Event 10">
-      <img src="placeholder11.jpg" alt="Event 11">
-      <img src="placeholder12.jpg" alt="Event 12">
-      <img src="placeholder13.jpg" alt="Event 13">
-      <img src="placeholder14.jpg" alt="Event 14">
-      <img src="placeholder15.jpg" alt="Event 15">
-      <img src="placeholder16.jpg" alt="Event 16">
-      <img src="placeholder17.jpg" alt="Event 17">
-      <img src="placeholder18.jpg" alt="Event 18">
-      <img src="placeholder19.jpg" alt="Event 19">
-      <img src="placeholder20.jpg" alt="Event 20">
-      <img src="placeholder21.jpg" alt="Event 21">
-      <img src="placeholder22.jpg" alt="Event 22">
-      <img src="placeholder23.jpg" alt="Event 23">
-      <img src="placeholder24.jpg" alt="Event 24">
-      <img src="placeholder25.jpg" alt="Event 25">
-      <img src="placeholder26.jpg" alt="Event 26">
-      <img src="placeholder27.jpg" alt="Event 27">
-      <img src="placeholder28.jpg" alt="Event 28">
-      <img src="placeholder29.jpg" alt="Event 29">
-      <img src="placeholder30.jpg" alt="Event 30">
+      <!-- 10 responsive images -->
+      <img src="photo1.jpg" alt="School Event 1">
+      <img src="photo2.jpg" alt="School Event 2">
+      <img src="photo3.jpg" alt="School Event 3">
+      <img src="photo4.jpg" alt="School Event 4">
+      <img src="photo5.jpg" alt="School Event 5">
+      <img src="photo6.jpg" alt="School Event 6">
+      <img src="photo7.jpg" alt="School Event 7">
+      <img src="photo8.jpg" alt="School Event 8">
+      <img src="photo9.jpg" alt="School Event 9">
+      <img src="photo10.jpg" alt="School Event 10">
     </div>
+
   </main>
 
   <footer>
     <p>© 2025 Olekasasi — Strive To Excel</p>
   </footer>
 
-  <script>
-    // Simple nav toggle for mobile
-    function toggleNav() {
-      const nav = document.getElementById('mainNav');
-      nav.style.display = nav.style.display === 'block' ? 'none' : 'block';
-    }
-  </script>
 </body>
 </html>
