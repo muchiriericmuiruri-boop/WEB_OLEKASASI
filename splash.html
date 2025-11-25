@@ -3,36 +3,40 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Olekasasi School</title>
-  <link rel="stylesheet" href="style.css">
+  <title>Welcome — Olekasasi School</title>
   <style>
-    /* Theme Colors */
+    /* THEME COLORS */
     :root {
       --maroon: #800000;
       --navy: #001f3f;
       --white: #ffffff;
     }
 
-    body, html {
+    /* Reset */
+    * {
       margin: 0;
       padding: 0;
+      box-sizing: border-box;
+    }
+
+    body, html {
+      width: 100%;
+      height: 100%;
       font-family: Arial, sans-serif;
     }
 
-    /* Splash Screen */
+    /* SPLASH SCREEN */
     #splash {
-      position: fixed;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(135deg, var(--navy), var(--maroon));
       display: flex;
       flex-direction: column;
-      align-items: center;
       justify-content: center;
+      align-items: center;
+      background: linear-gradient(to bottom, var(--navy), var(--maroon));
       color: var(--white);
-      z-index: 9999;
+      width: 100%;
+      height: 100%;
       text-align: center;
-      transition: opacity 0.8s ease;
+      padding: 20px;
     }
 
     #splash img {
@@ -41,7 +45,7 @@
       border-radius: 50%;
       object-fit: cover;
       margin-bottom: 20px;
-      border: 3px solid var(--white);
+      border: 4px solid var(--white);
     }
 
     #splash h1 {
@@ -53,121 +57,11 @@
       font-size: 18px;
     }
 
-    /* Main Content Hidden Initially */
-    #mainContent {
-      display: none;
-    }
-
-    /* Header */
-    header {
-      background: var(--navy);
-      color: white;
-      padding: 10px 0;
-      position: sticky;
-      top: 0;
-      z-index: 100;
-    }
-
-    .header-inner {
-      width: 95%;
-      margin: auto;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-wrap: wrap;
-    }
-
-    .brand {
-      display: flex;
-      align-items: center;
-    }
-
-    .school-logo {
-      width: 60px;
-      height: 60px;
-      border-radius: 8px;
-      object-fit: cover;
-      margin-right: 10px;
-    }
-
-    .brand h1 {
-      font-size: 18px;
-      margin: 0;
-    }
-
-    .motto {
-      margin: 0;
-      font-size: 13px;
-      color: #ffdddd;
-    }
-
-    .main-nav ul {
-      list-style: none;
-      display: flex;
-      padding: 0;
-      margin: 0;
-      gap: 15px;
-    }
-
-    .main-nav a {
-      color: white;
-      text-decoration: none;
-      padding: 8px 10px;
-    }
-
-    .main-nav a:hover,
-    .main-nav .active {
-      background: var(--maroon);
-      border-radius: 5px;
-    }
-
-    .nav-toggle {
-      font-size: 26px;
-      background: none;
-      border: none;
-      color: white;
-      display: none;
-      cursor: pointer;
-    }
-
-    main {
-      width: 95%;
-      margin: auto;
-      max-width: 1000px;
-      padding: 20px 0;
-    }
-
-    footer {
-      background: var(--maroon);
-      color: white;
-      text-align: center;
-      padding: 10px;
-      margin-top: 20px;
-    }
-
-    /* Responsive */
-    @media (max-width: 900px) {
-      .main-nav {
-        display: none;
-        background: var(--navy);
-        width: 100%;
-      }
-      .main-nav.open {
-        display: block;
-      }
-      .main-nav ul {
-        flex-direction: column;
-        padding: 10px 0;
-      }
-      .nav-toggle {
-        display: block;
-      }
-    }
-
+    /* RESPONSIVE */
     @media (max-width: 600px) {
-      .school-logo {
-        width: 50px;
-        height: 50px;
+      #splash img {
+        width: 120px;
+        height: 120px;
       }
       #splash h1 {
         font-size: 22px;
@@ -180,70 +74,18 @@
 </head>
 <body>
 
-  <!-- Splash Screen -->
   <div id="splash">
     <img src="photos/school-logo.jpg" alt="Olekasasi Logo">
     <h1>Welcome to Olekasasi Mixed Day Secondary School</h1>
     <p>Located in Ongata Rongai, Kenya</p>
   </div>
 
-  <!-- Main Content -->
-  <div id="mainContent">
-
-    <!-- Header -->
-    <header>
-      <div class="header-inner">
-        <div class="brand">
-          <img src="photos/school-logo.jpg" alt="Olekasasi Logo" class="school-logo">
-          <div>
-            <h1>Olekasasi Mixed Day Secondary School</h1>
-            <p class="motto">Strive To Excel</p>
-          </div>
-        </div>
-        <button class="nav-toggle" onclick="toggleNav()">☰</button>
-        <nav class="main-nav" id="mainNav">
-          <ul>
-            <li><a href="index.html" class="active">Home</a></li>
-            <li><a href="about.html">About</a></li>
-            <li><a href="academics.html">Academics</a></li>
-            <li><a href="clubs.html">Clubs</a></li>
-            <li><a href="gallery.html">Gallery</a></li>
-            <li><a href="staff.html">Staff</a></li>
-            <li><a href="news.html">News/Events</a></li>
-            <li><a href="admissions.html" class="admissions-link">Admissions</a></li>
-            <a href="login/index.html">Login</a>
-          </ul>
-        </nav>
-      </div>
-    </header>
-
-    <!-- Hero / Slideshow Example -->
-    <main>
-      <section class="hero">
-        <h2>Welcome to Our School</h2>
-        <p>Strive to Excel</p>
-      </section>
-
-      <section>
-        <h2>About Olekasasi</h2>
-        <p>A public Mixed Day Secondary School committed to academic excellence, character development, and extracurricular achievement.</p>
-      </section>
-    </main>
-
-    <!-- Footer -->
-    <footer>
-      <p>© 2026 Olekasasi — Strive To Excel</p>
-    </footer>
-  </div>
-
   <script>
-    // Splash Screen Fade Out
-    window.addEventListener('load', () => {
-      setTimeout(() => {
-        const splash = document.getElementById('splash');
-        splash.style.opacity = '0';
-        setTimeout(() => {
-          splash.style.display = 'none';
-          document.getElementById('mainContent').style.display = 'block';
-        }, 800);
-      }, 3000); // Show splash fo
+    // Redirect to index.html after 3 seconds
+    setTimeout(() => {
+      window.location.href = "index.html";
+    }, 3000);
+  </script>
+
+</body>
+</html>
