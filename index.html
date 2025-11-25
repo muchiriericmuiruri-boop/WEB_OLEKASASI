@@ -3,21 +3,49 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Home — Olekasasi School</title>
-
+  <title>Olekasasi Mixed Day Secondary School</title>
   <style>
-    /* COLORS */
+    /* Theme Colors */
     :root {
       --maroon: #800000;
       --navy: #001f3f;
       --white: #ffffff;
     }
 
-    body {
-      margin: 0;
+    /* Reset */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body, html {
       font-family: Arial, sans-serif;
-      background: var(--white);
-      color: var(--navy);
+      scroll-behavior: smooth;
+    }
+
+    /* SPLASH SCREEN */
+    #splash {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: var(--navy);
+      color: var(--white);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      z-index: 9999;
+    }
+    #splash img {
+      width: 180px; height: 180px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-bottom: 20px;
+      border: 4px solid var(--maroon);
+    }
+    #splash h1 {
+      font-size: 28px; margin-bottom: 10px;
+    }
+    #splash p {
+      font-size: 18px;
     }
 
     /* HEADER */
@@ -29,175 +57,106 @@
       top: 0;
       z-index: 100;
     }
-
     .header-inner {
       width: 95%;
       margin: auto;
       display: flex;
-      align-items: center;
       justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
     }
-
-    /* LOGO */
+    .brand { display: flex; align-items: center; }
     .school-logo {
-      width: 60px;
-      height: 60px;
-      border-radius: 6px;
+      width: 60px; height: 60px;
+      border-radius: 10px;
       object-fit: cover;
       margin-right: 10px;
     }
+    .brand h1 { font-size: 18px; color: var(--white); }
+    .motto { font-size: 13px; color: #ffdddd; }
 
-    .brand {
-      display: flex;
-      align-items: center;
+    nav ul {
+      list-style: none; display: flex; gap: 15px; align-items: center;
+      flex-wrap: wrap;
     }
-
-    .brand h1 {
-      font-size: 18px;
-      margin: 0;
-      color: white;
+    nav a {
+      text-decoration: none; color: var(--white);
+      padding: 8px 12px; border-radius: 5px;
+      transition: background 0.3s;
     }
+    nav a:hover, nav .active { background: var(--maroon); }
 
-    .motto {
-      margin: 0;
-      font-size: 13px;
-      color: #ffdddd;
-    }
-
-    /* NAVIGATION */
-    .main-nav ul {
-      list-style: none;
-      display: flex;
-      padding: 0;
-      margin: 0;
-      gap: 15px;
-    }
-
-    .main-nav a {
-      color: white;
-      text-decoration: none;
-      padding: 8px 10px;
-    }
-
-    .main-nav a:hover,
-    .main-nav .active {
-      background: var(--maroon);
-      border-radius: 5px;
-    }
-
-    /* MOBILE NAV BUTTON */
     .nav-toggle {
-      font-size: 26px;
-      background: none;
-      border: none;
-      color: white;
-      display: none;
-      cursor: pointer;
+      font-size: 26px; background: none; border: none;
+      color: var(--white); cursor: pointer; display: none;
     }
 
-    /* SLIDESHOW */
-    .hero {
-      position: relative;
-      height: 380px;
-      overflow: hidden;
-      text-align: center;
-      color: white;
-    }
-
-    .slideshow-container {
-      height: 100%;
-      width: 100%;
-      position: absolute;
-    }
-
-    .slide img {
-      width: 100%;
-      height: 380px;
-      object-fit: cover;
-    }
-
-    .slide {
-      display: none;
-    }
-
+    /* HERO SLIDESHOW */
+    .hero { position: relative; height: 400px; overflow: hidden; }
+    .slide { display: none; width: 100%; height: 400px; }
+    .slide img { width: 100%; height: 100%; object-fit: cover; }
     .hero-text {
-      position: absolute;
-      top: 35%;
-      width: 100%;
-      text-shadow: 2px 2px 5px black;
+      position: absolute; top: 35%; width: 100%;
+      text-align: center; color: var(--white);
+      text-shadow: 2px 2px 6px black;
     }
+    .hero-text h2 { font-size: 28px; }
+    .hero-text p { font-size: 18px; }
 
-    .hero-text h2 {
-      font-size: 28px;
-    }
+    /* MAIN SECTIONS */
+    main { width: 95%; max-width: 1200px; margin: 30px auto; }
+    section { margin-bottom: 30px; }
+    section h2 { color: var(--navy); margin-bottom: 10px; }
+    section p { font-size: 16px; line-height: 1.6; }
 
-    /* SECTIONS */
-    section {
-      padding: 20px;
-      width: 95%;
-      margin: auto;
-      max-width: 1000px;
+    /* EVENTS CARDS */
+    .events { display: grid; grid-template-columns: repeat(auto-fit,minmax(250px,1fr)); gap: 20px; }
+    .event-card {
+      border: 1px solid #ccc; border-radius: 10px; overflow: hidden;
+      transition: transform 0.3s, box-shadow 0.3s;
     }
+    .event-card:hover { transform: scale(1.03); box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
+    .event-card img { width: 100%; height: 180px; object-fit: cover; }
+    .event-card h3 { padding: 10px; background: var(--maroon); color: var(--white); }
 
     /* FOOTER */
-    footer {
-      background: var(--maroon);
-      color: white;
-      text-align: center;
-      padding: 10px;
-      margin-top: 20px;
-    }
+    footer { background: var(--maroon); color: white; text-align: center; padding: 15px 0; margin-top: 20px; }
 
-    /* -------------------- RESPONSIVE -------------------- */
+    /* RESPONSIVE */
     @media (max-width: 900px) {
-      .main-nav {
-        display: none;
-        background: var(--navy);
-        width: 100%;
-      }
-      .main-nav.open {
-        display: block;
-      }
-      .main-nav ul {
-        flex-direction: column;
-        padding: 10px 0;
-      }
-      .nav-toggle {
-        display: block;
-      }
-      .brand h1 {
-        font-size: 16px;
-      }
+      .main-nav { display: none; background: var(--navy); width: 100%; }
+      .main-nav.open { display: block; }
+      .main-nav ul { flex-direction: column; padding: 10px 0; }
+      .nav-toggle { display: block; }
+      .brand h1 { font-size: 16px; }
     }
-
     @media (max-width: 600px) {
-      .school-logo {
-        width: 50px;
-        height: 50px;
-      }
-      .hero-text h2 {
-        font-size: 22px;
-      }
+      .school-logo { width: 50px; height: 50px; }
+      .hero-text h2 { font-size: 22px; }
+      .hero-text p { font-size: 14px; }
     }
-
   </style>
-
 </head>
 <body>
 
+  <!-- SPLASH SCREEN -->
+  <div id="splash">
+    <img src="photos/school-logo.jpg" alt="School Logo">
+    <h1>Welcome to Olekasasi Mixed Day Secondary School</h1>
+    <p>Located in Ongata Rongai, Nairobi</p>
+  </div>
+
+  <!-- HEADER -->
   <header>
     <div class="header-inner">
       <div class="brand">
-        <!-- Logo from main-images folder -->
-        <img src="main-images/school-logo.jpg" alt="Olekasasi Logo" class="school-logo">
+        <img src="photos/school-logo.jpg" alt="School Logo" class="school-logo">
         <div>
           <h1>Olekasasi Mixed Day Secondary School</h1>
           <p class="motto">Strive To Excel</p>
         </div>
       </div>
-
       <button class="nav-toggle" onclick="toggleNav()">☰</button>
-
       <nav class="main-nav" id="mainNav">
         <ul>
           <li><a href="index.html" class="active">Home</a></li>
@@ -206,85 +165,78 @@
           <li><a href="clubs.html">Clubs</a></li>
           <li><a href="gallery.html">Gallery</a></li>
           <li><a href="staff.html">Staff</a></li>
-          <li><a href="contact.html">Contact</a></li>
+          <li><a href="news.html">News/Events</a></li>
           <li><a href="admissions.html">Admissions</a></li>
-          <li><a href="news-events.html">News & Events</a></li>
-          <a href="login/index.html">Login</a>
+          <li><a href="contact.html">Contact</a></li>
         </ul>
       </nav>
     </div>
   </header>
 
-  <!-- HERO WITH SLIDESHOW -->
+  <!-- HERO SLIDESHOW -->
   <section class="hero">
-    <div class="slideshow-container">
-
-      <div class="slide fade">
-        <img src="main-images/schoolbus.jfif" alt="Slide 1">
-      </div>
-
-      <div class="slide fade">
-        <img src="main-images/parade ground.jfif" alt="Slide 2">
-      </div>
-
-      <div class="slide fade">
-        <img src="main-images/school lab.jfif" alt="Slide 3">
-      </div>
-
-    </div>
-
+    <div class="slide"><img src="photos/img1.jpg" alt="School Life 1"></div>
+    <div class="slide"><img src="photos/img2.jpg" alt="School Life 2"></div>
+    <div class="slide"><img src="photos/img3.jpg" alt="School Life 3"></div>
     <div class="hero-text">
-      <h2>Welcome to Olekasasi Mixed Day Secondary School</h2>
-      <p>Strive to Excel</p>
+      <h2>Strive To Excel</h2>
+      <p>Empowering students for a bright future</p>
     </div>
   </section>
 
   <!-- ABOUT -->
-  <section>
-    <h2>About Us</h2>
-    <p>
-      A public Mixed secondary school categorized as C4 under the new Competency-Based Education (CBE) curriculum. 
-      We are dedicated to empowering our students through quality education, discipline, and integrity, while providing 
-      a safe and supportive environment where every child can discover their potential and thrive.
-      <br><br>
-      Browse through our website to learn more about us, from our academic programs and vibrant student life 
-      to our achievements and community engagement.
-    </p>
-  </section>
+  <main>
+    <section>
+      <h2>About Olekasasi</h2>
+      <p>Olekasasi Mixed Day Secondary School is dedicated to academic excellence, discipline, and holistic development of students. Browse our site to learn more about our programs, achievements, and vibrant student life.</p>
+    </section>
+
+    <!-- UPCOMING EVENTS -->
+    <section>
+      <h2>Upcoming Events</h2>
+      <div class="events">
+        <div class="event-card">
+          <img src="photos/event1.jpg" alt="Event 1">
+          <h3>Science Fair</h3>
+        </div>
+        <div class="event-card">
+          <img src="photos/event2.jpg" alt="Event 2">
+          <h3>Sports Day</h3>
+        </div>
+        <div class="event-card">
+          <img src="photos/event3.jpg" alt="Event 3">
+          <h3>Drama Festival</h3>
+        </div>
+      </div>
+    </section>
+  </main>
 
   <footer>
     <p>© 2026 Olekasasi — Strive To Excel</p>
   </footer>
 
   <script>
-    /* SLIDESHOW */
+    // SPLASH SCREEN
+    window.addEventListener('load', () => {
+      setTimeout(() => { document.getElementById('splash').style.display = 'none'; }, 3000);
+    });
+
+    // HERO SLIDESHOW
     let slideIndex = 0;
-    showSlides();
-
     function showSlides() {
-      let slides = document.getElementsByClassName("slide");
-      
-      for (let i = 0; i < slides.length; i++) {
-        slides[i].style.display = "none";
-      }
-
+      const slides = document.getElementsByClassName("slide");
+      for (let i = 0; i < slides.length; i++) slides[i].style.display = "none";
       slideIndex++;
-      if (slideIndex > slides.length) { slideIndex = 1 }
-
+      if (slideIndex > slides.length) slideIndex = 1;
       slides[slideIndex - 1].style.display = "block";
       setTimeout(showSlides, 4000);
     }
+    showSlides();
 
-    /* MOBILE NAV */
+    // MOBILE NAV
     function toggleNav() {
-      const nav = document.getElementById("mainNav");
-      nav.classList.toggle("open");
+      document.getElementById('mainNav').classList.toggle('open');
     }
   </script>
-
 </body>
 </html>
-
-
-
-
