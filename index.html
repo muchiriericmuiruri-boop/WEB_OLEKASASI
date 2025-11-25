@@ -4,149 +4,21 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Olekasasi Mixed Day Secondary School</title>
-  <style>
-    /* Theme Colors */
-    :root {
-      --maroon: #800000;
-      --navy: #001f3f;
-      --white: #ffffff;
-    }
-
-    /* Reset */
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-
-    body, html {
-      font-family: Arial, sans-serif;
-      scroll-behavior: smooth;
-    }
-
-    /* SPLASH SCREEN */
-    #splash {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background: var(--navy);
-      color: var(--white);
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      text-align: center;
-      z-index: 9999;
-    }
-    #splash img {
-      width: 180px; height: 180px;
-      border-radius: 50%;
-      object-fit: cover;
-      margin-bottom: 20px;
-      border: 4px solid var(--maroon);
-    }
-    #splash h1 {
-      font-size: 28px; margin-bottom: 10px;
-    }
-    #splash p {
-      font-size: 18px;
-    }
-
-    /* HEADER */
-    header {
-      background: var(--navy);
-      color: white;
-      padding: 10px 0;
-      position: sticky;
-      top: 0;
-      z-index: 100;
-    }
-    .header-inner {
-      width: 95%;
-      margin: auto;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-    }
-    .brand { display: flex; align-items: center; }
-    .school-logo {
-      width: 60px; height: 60px;
-      border-radius: 10px;
-      object-fit: cover;
-      margin-right: 10px;
-    }
-    .brand h1 { font-size: 18px; color: var(--white); }
-    .motto { font-size: 13px; color: #ffdddd; }
-
-    nav ul {
-      list-style: none; display: flex; gap: 15px; align-items: center;
-      flex-wrap: wrap;
-    }
-    nav a {
-      text-decoration: none; color: var(--white);
-      padding: 8px 12px; border-radius: 5px;
-      transition: background 0.3s;
-    }
-    nav a:hover, nav .active { background: var(--maroon); }
-
-    .nav-toggle {
-      font-size: 26px; background: none; border: none;
-      color: var(--white); cursor: pointer; display: none;
-    }
-
-    /* HERO SLIDESHOW */
-    .hero { position: relative; height: 400px; overflow: hidden; }
-    .slide { display: none; width: 100%; height: 400px; }
-    .slide img { width: 100%; height: 100%; object-fit: cover; }
-    .hero-text {
-      position: absolute; top: 35%; width: 100%;
-      text-align: center; color: var(--white);
-      text-shadow: 2px 2px 6px black;
-    }
-    .hero-text h2 { font-size: 28px; }
-    .hero-text p { font-size: 18px; }
-
-    /* MAIN SECTIONS */
-    main { width: 95%; max-width: 1200px; margin: 30px auto; }
-    section { margin-bottom: 30px; }
-    section h2 { color: var(--navy); margin-bottom: 10px; }
-    section p { font-size: 16px; line-height: 1.6; }
-
-    /* EVENTS CARDS */
-    .events { display: grid; grid-template-columns: repeat(auto-fit,minmax(250px,1fr)); gap: 20px; }
-    .event-card {
-      border: 1px solid #ccc; border-radius: 10px; overflow: hidden;
-      transition: transform 0.3s, box-shadow 0.3s;
-    }
-    .event-card:hover { transform: scale(1.03); box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
-    .event-card img { width: 100%; height: 180px; object-fit: cover; }
-    .event-card h3 { padding: 10px; background: var(--maroon); color: var(--white); }
-
-    /* FOOTER */
-    footer { background: var(--maroon); color: white; text-align: center; padding: 15px 0; margin-top: 20px; }
-
-    /* RESPONSIVE */
-    @media (max-width: 900px) {
-      .main-nav { display: none; background: var(--navy); width: 100%; }
-      .main-nav.open { display: block; }
-      .main-nav ul { flex-direction: column; padding: 10px 0; }
-      .nav-toggle { display: block; }
-      .brand h1 { font-size: 16px; }
-    }
-    @media (max-width: 600px) {
-      .school-logo { width: 50px; height: 50px; }
-      .hero-text h2 { font-size: 22px; }
-      .hero-text p { font-size: 14px; }
-    }
-  </style>
+  <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
-  <!-- SPLASH SCREEN -->
-  <div id="splash">
-    <img src="photos/school-logo.jpg" alt="School Logo">
-    <h1>Welcome to Olekasasi Mixed Day Secondary School</h1>
-    <p>Located in Ongata Rongai, Nairobi</p>
-  </div>
+<!-- SPLASH SCREEN -->
+<div id="splash">
+  <img src="photos/school-logo.jpg" class="splash-logo">
+  <h1>Welcome to Olekasasi Mixed Day Secondary School</h1>
+  <p>Nairobi – Ongata Rongai, Kware Area</p>
+</div>
 
-  <!-- HEADER -->
+<!-- MAIN CONTENT -->
+<div id="mainContent" style="display:none;">
+
   <header>
     <div class="header-inner">
       <div class="brand">
@@ -159,84 +31,107 @@
       <button class="nav-toggle" onclick="toggleNav()">☰</button>
       <nav class="main-nav" id="mainNav">
         <ul>
-          <li><a href="index.html" class="active">Home</a></li>
+          <li><a class="active" href="index.html">Home</a></li>
           <li><a href="about.html">About</a></li>
           <li><a href="academics.html">Academics</a></li>
           <li><a href="clubs.html">Clubs</a></li>
           <li><a href="gallery.html">Gallery</a></li>
           <li><a href="staff.html">Staff</a></li>
-          <li><a href="news.html">News/Events</a></li>
-          <li><a href="admissions.html">Admissions</a></li>
           <li><a href="contact.html">Contact</a></li>
+          <li><a href="admissions.html">Admissions</a></li>
+          <a href="login/index.html">Login</a>
         </ul>
       </nav>
     </div>
   </header>
 
-  <!-- HERO SLIDESHOW -->
-  <section class="hero">
-    <div class="slide"><img src="photos/img1.jpg" alt="School Life 1"></div>
-    <div class="slide"><img src="photos/img2.jpg" alt="School Life 2"></div>
-    <div class="slide"><img src="photos/img3.jpg" alt="School Life 3"></div>
-    <div class="hero-text">
-      <h2>Strive To Excel</h2>
-      <p>Empowering students for a bright future</p>
+  <!-- SLIDESHOW -->
+  <section class="slideshow">
+    <img src="photos/img1.jpg" class="slide active">
+    <img src="photos/img2.jpg" class="slide">
+    <img src="photos/img3.jpg" class="slide">
+  </section>
+
+  <!-- EVENTS -->
+  <section class="events">
+    <h2>Upcoming Events</h2>
+    <button onclick="toggleEvents()" class="btn">Show Upcoming Events</button>
+
+    <div id="eventsList" style="display:none;">
+      <div class="event-card">
+        <img src="photos/event1.jpg">
+        <h3>Sports Day</h3>
+        <p>Date: 15th February 2025</p>
+      </div>
+
+      <div class="event-card">
+        <img src="photos/event2.jpg">
+        <h3>Drama Festival</h3>
+        <p>Date: 10th March 2025</p>
+      </div>
+
+      <div class="event-card">
+        <img src="photos/event3.jpg">
+        <h3>Science Congress</h3>
+        <p>Date: 25th March 2025</p>
+      </div>
     </div>
   </section>
 
-  <!-- ABOUT -->
-  <main>
-    <section>
-      <h2>About Olekasasi</h2>
-      <p>Olekasasi Mixed Day Secondary School is dedicated to academic excellence, discipline, and holistic development of students. Browse our site to learn more about our programs, achievements, and vibrant student life.</p>
-    </section>
+  <!-- SCHOOL INFORMATION -->
+  <section class="info-section">
+    <h2>School Information</h2>
 
-    <!-- UPCOMING EVENTS -->
-    <section>
-      <h2>Upcoming Events</h2>
-      <div class="events">
-        <div class="event-card">
-          <img src="photos/event1.jpg" alt="Event 1">
-          <h3>Science Fair</h3>
-        </div>
-        <div class="event-card">
-          <img src="photos/event2.jpg" alt="Event 2">
-          <h3>Sports Day</h3>
-        </div>
-        <div class="event-card">
-          <img src="photos/event3.jpg" alt="Event 3">
-          <h3>Drama Festival</h3>
-        </div>
-      </div>
-    </section>
-  </main>
+    <p><b>Location:</b> Ongata Rongai – Kware Area</p>
+
+    <p><b>Contacts:</b></p>
+    <ul>
+      <li>Office: 07XX XXX XXX</li>
+      <li>Deputy Principal: 07XX XXX XXX</li>
+    </ul>
+
+    <p><b>Social Media:</b></p>
+    <ul>
+      <li>Facebook: Olekasasi Mixed Day Secondary School</li>
+      <li>Instagram: @olekasasischool</li>
+      <li>TikTok: @olekasasi_high</li>
+    </ul>
+  </section>
+
+  <!-- PARTNERS SLIDER -->
+  <section class="partners">
+    <h2>Our Partners</h2>
+
+    <div class="partners-slider">
+      <img src="photos/partner1.jpg">
+      <img src="photos/partner2.jpg">
+      <img src="photos/partner3.jpg">
+      <img src="photos/partner4.jpg">
+      <img src="photos/partner5.jpg">
+    </div>
+  </section>
 
   <footer>
-    <p>© 2026 Olekasasi — Strive To Excel</p>
+    <p>© 2025 Olekasasi — Strive To Excel</p>
   </footer>
 
-  <script>
-    // SPLASH SCREEN
-    window.addEventListener('load', () => {
-      setTimeout(() => { document.getElementById('splash').style.display = 'none'; }, 3000);
-    });
+</div>
 
-    // HERO SLIDESHOW
-    let slideIndex = 0;
-    function showSlides() {
-      const slides = document.getElementsByClassName("slide");
-      for (let i = 0; i < slides.length; i++) slides[i].style.display = "none";
-      slideIndex++;
-      if (slideIndex > slides.length) slideIndex = 1;
-      slides[slideIndex - 1].style.display = "block";
-      setTimeout(showSlides, 4000);
-    }
-    showSlides();
+<script src="script.js"></script>
 
-    // MOBILE NAV
-    function toggleNav() {
-      document.getElementById('mainNav').classList.toggle('open');
-    }
-  </script>
+<script>
+// Splash screen timeout
+setTimeout(() => {
+  document.getElementById("splash").style.display = "none";
+  document.getElementById("mainContent").style.display = "block";
+}, 3000);
+
+// Toggle events
+function toggleEvents() {
+  const list = document.getElementById("eventsList");
+  list.style.display = list.style.display === "none" ? "block" : "none";
+}
+</script>
+
 </body>
 </html>
