@@ -1,168 +1,348 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Olekasasi Mixed Day Secondary School</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Olekasasi Mixed Day Secondary School</title>
 
-    <style>
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background: #f4f4f4;
-        }
+  <style>
+    :root{
+      --navy: #001f3f;
+      --maroon: #800000;
+      --white: #ffffff;
+      --muted: #f2f3f5;
+      --accent: #0057b8;
+      --max-width: 1200px;
+      --gap: 18px;
+    }
 
-        /* NAVBAR */
-        header {
-            background: navy;
-            padding: 15px;
-            color: white;
-            text-align: center;
-            font-size: 22px;
-            font-weight: bold;
-        }
+    /* Reset & base */
+    *{box-sizing:border-box}
+    body{margin:0;font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; color:#222;background:var(--muted);line-height:1.5}
+    a{color:inherit;text-decoration:none}
 
-        /* HERO SLIDER */
-        .slider {
-            width: 100%;
-            height: 300px;
-            overflow: hidden;
-            position: relative;
-        }
-        .slides {
-            display: flex;
-            width: 300%;
-            animation: slide 12s infinite;
-        }
-        .slides img {
-            width: 100%;
-            height: 300px;
-            object-fit: cover;
-        }
-        @keyframes slide {
-            0% {transform: translateX(0%);}
-            33% {transform: translateX(-100%);}
-            66% {transform: translateX(-200%);}
-            100% {transform: translateX(0%);}
-        }
+    /* Splash (full screen) */
+    #splash {
+      position:fixed; inset:0; display:flex; align-items:center; justify-content:center;
+      background: linear-gradient(135deg,var(--navy) 55%, var(--maroon) 55%);
+      color:var(--white); z-index:9999; text-align:center; padding:24px;
+    }
+    #splash .logo{
+      width:180px; height:180px; border-radius:50%; object-fit:cover; border:5px solid rgba(255,255,255,0.85); margin-bottom:18px;
+    }
+    #splash h1{font-size:26px; margin:6px 0}
+    #splash p{color:rgba(255,255,255,0.9); margin:0}
 
-        /* EVENTS */
-        .events {
-            padding: 20px;
-            background: white;
-            text-align: center;
-        }
-        .events button {
-            background: maroon;
-            color: white;
-            padding: 12px 20px;
-            border: none;
-            border-radius: 8px;
-            font-size: 16px;
-        }
+    /* Header */
+    header{background:var(--navy); color:var(--white); position:sticky; top:0; z-index:900; box-shadow:0 2px 6px rgba(0,0,0,0.08)}
+    .header-inner{max-width:var(--max-width); margin:0 auto; display:flex; align-items:center; justify-content:space-between; padding:12px 20px; gap:12px}
+    .brand{display:flex; align-items:center; gap:12px}
+    .brand img{width:56px; height:56px; object-fit:cover; border-radius:8px}
+    .brand h1{font-size:18px; margin:0}
+    .motto{font-size:12px; color:#ffdede;margin:0}
 
-        /* SCHOOL INFO */
-        .info {
-            padding: 20px;
-            background: #eeeeee;
-        }
-        .info h2 {
-            color: navy;
-            text-align: center;
-        }
+    /* Nav */
+    .nav {display:flex; align-items:center; gap:12px}
+    .nav a{color:var(--white); padding:8px 10px; border-radius:6px; display:inline-block}
+    .nav a:hover, .nav a.active{background:var(--maroon)}
+    .nav-toggle{display:none; background:none; border:0; font-size:24px; color:var(--white); cursor:pointer}
 
-        /* PARTNERS */
-        .partners {
-            padding: 20px;
-            background: white;
-        }
-        .partners h2 {
-            text-align: center;
-            color: maroon;
-        }
-        .logo-scroll {
-            display: flex;
-            gap: 30px;
-            animation: moveLogos 12s linear infinite;
-        }
-        .logo-scroll img {
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            object-fit: cover;
-        }
-        @keyframes moveLogos {
-            from {transform: translateX(100%);}
-            to {transform: translateX(-100%);}
-        }
+    /* Layout container */
+    .container{max-width:var(--max-width); margin:26px auto; padding:0 18px}
 
-        /* FOOTER */
-        footer {
-            background: navy;
-            color: white;
-            text-align: center;
-            padding: 25px;
-        }
-    </style>
+    /* HERO SLIDESHOW */
+    .hero{position:relative; border-radius:12px; overflow:hidden; box-shadow:0 6px 20px rgba(0,0,0,0.08)}
+    .hero .slides{display:flex; transition:transform .6s ease; width:100%}
+    .hero .slide{min-width:100%; height:420px; display:block; position:relative}
+    .hero .slide img{width:100%; height:420px; object-fit:cover; display:block}
+    .hero .overlay{position:absolute; inset:0; display:flex; align-items:center; justify-content:center; flex-direction:column; gap:8px; text-align:center}
+    .hero h2{color:var(--white); font-size:34px; margin:0; text-shadow:2px 4px 12px rgba(0,0,0,0.5)}
+    .hero p{color: #fff; opacity:0.95; font-size:16px; margin:0; text-shadow:1px 2px 6px rgba(0,0,0,0.45)}
+
+    /* Controls */
+    .hero .dots{position:absolute; bottom:12px; left:50%; transform:translateX(-50%); display:flex; gap:8px}
+    .dot{width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,0.5);cursor:pointer}
+    .dot.active{background:var(--maroon)}
+
+    /* Sections */
+    .row{display:grid; grid-template-columns:1fr 340px; gap:var(--gap); align-items:start}
+    @media (max-width:980px){ .row{grid-template-columns:1fr; } .hero .slide{height:300px} .hero .slide img{height:300px} }
+
+    /* Latest news cards */
+    .cards{display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:16px}
+    .card{background:var(--white); border-radius:10px; overflow:hidden; box-shadow:0 4px 18px rgba(0,0,0,0.06); display:flex; flex-direction:column}
+    .card img{width:100%; height:160px; object-fit:cover}
+    .card .body{padding:14px; flex:1}
+    .tag{display:inline-block; padding:6px 8px; background:var(--maroon); color:white; border-radius:6px; font-size:12px; margin-bottom:8px}
+
+    /* Events list (right column) */
+    .events-sidebar{background:var(--white); padding:14px; border-radius:10px; box-shadow:0 4px 18px rgba(0,0,0,0.06)}
+    .event-item{display:flex; gap:12px; margin-bottom:12px; align-items:center}
+    .event-item img{width:72px; height:58px; object-fit:cover; border-radius:8px}
+    .event-item .meta{font-size:14px}
+    .btn{display:inline-block; padding:10px 14px; background:var(--maroon); color:var(--white); border-radius:8px; border:0; cursor:pointer; text-decoration:none}
+    .btn.secondary{background:var(--navy)}
+
+    /* School info cards */
+    .info-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:14px; margin-top:18px}
+    .info-card{background:var(--white); padding:14px; border-radius:10px; box-shadow:0 4px 12px rgba(0,0,0,0.06)}
+    .info-card h4{margin:0 0 6px 0; color:var(--navy)}
+
+    /* Partners carousel (right→left) */
+    .partners-area{background:var(--white); padding:18px; margin-top:22px; border-radius:10px; overflow:hidden}
+    .partners-track{display:flex; gap:18px; align-items:center; animation:partnersMove 12s linear infinite}
+    .partners-track img{width:92px; height:92px; border-radius:50%; object-fit:cover; border:3px solid #fff; box-shadow:0 6px 18px rgba(0,0,0,0.06)}
+    @keyframes partnersMove {0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+
+    /* Footer */
+    footer{background:var(--navy); color:var(--white); padding:20px; margin-top:26px; text-align:center}
+
+    /* Responsive tweaks */
+    @media (max-width:700px){
+      .hero h2{font-size:22px}
+      .hero p{font-size:14px}
+      .partners-track{animation-duration:18s}
+    }
+
+    /* Utility */
+    .muted{color:#666;font-size:14px}
+    .small{font-size:13px;color:#666}
+  </style>
 </head>
-
 <body>
 
-    <!-- NAVBAR -->
-    <header>Olekasasi Mixed Day Secondary School</header>
+  <!-- SPLASH SCREEN (auto hides and reveals site) -->
+  <div id="splash">
+    <img src="main-images/school-logo.jpg" alt="school logo" class="logo">
+    <h1>Welcome to Olekasasi Mixed Day Secondary School</h1>
+    <p>Ongata Rongai, Kenya</p>
+  </div>
 
-    <!-- IMAGE SLIDER -->
-    <div class="slider">
-        <div class="slides">
-            <img src="main-images/img1.jpg">
-            <img src="main-images/img2.jpg">
-            <img src="main-images/img3.jpg">
+  <!-- HEADER -->
+  <header>
+    <div class="header-inner">
+      <div class="brand">
+        <img src="main-images/school-logo.jpg" alt="logo">
+        <div>
+          <h1 style="margin:0;font-size:16px">Olekasasi Mixed Day Secondary School</h1>
+          <p class="motto" style="margin:2px 0 0; font-size:12px; color:#ffdede">Strive To Excel</p>
         </div>
-    </div>
+      </div>
 
-    <!-- EVENTS -->
-    <div class="events">
-        <h2>Upcoming Events</h2>
-        <p>Stay updated with school programs, tours, meetings and activities.</p>
-        <button onclick="window.location.href='news.html'">View Events</button>
+      <nav class="nav" aria-label="main navigation">
+        <a href="index.html" class="active">Home</a>
+        <a href="about.html">About</a>
+        <a href="academics.html">Academics</a>
+        <a href="clubs.html">Clubs</a>
+        <a href="gallery.html">Gallery</a>
+        <a href="staff.html">Staff</a>
+        <a href="news-events.html">News & Events</a>
+        <a href="admissions.html">Admissions</a>
+        <a href="contact.html">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container" id="mainContent" style="display:none">
+    <!-- HERO -->
+    <section class="hero" aria-label="hero slideshow">
+      <div class="slides" id="slides">
+        <div class="slide"><img src="main-images/hero1.jpg" alt="hero 1"></div>
+        <div class="slide"><img src="main-images/hero2.jpg" alt="hero 2"></div>
+        <div class="slide"><img src="main-images/hero3.jpg" alt="hero 3"></div>
+      </div>
+
+      <div class="overlay" style="position:absolute; inset:0; pointer-events:none">
+        <div class="overlay-inner" style="display:flex;flex-direction:column;align-items:center;gap:8px; margin-top:40px">
+          <h2>Strive To Excel</h2>
+          <p>Empowering students to succeed academically and in life</p>
+        </div>
+      </div>
+
+      <div class="dots" style="pointer-events:auto; position:absolute; bottom:14px; left:50%; transform:translateX(-50%); display:flex; gap:8px">
+        <span class="dot" data-index="0"></span>
+        <span class="dot" data-index="1"></span>
+        <span class="dot" data-index="2"></span>
+      </div>
+    </section>
+
+    <div class="row" style="margin-top:22px">
+      <!-- LEFT: Latest News -->
+      <div>
+        <h3 style="margin-bottom:10px">Latest News</h3>
+
+        <div class="cards" role="list">
+          <article class="card" role="listitem">
+            <img src="main-images/news1.jpg" alt="news 1">
+            <div class="body">
+              <span class="tag">Announcement</span>
+              <h4 style="margin:8px 0 10px 0">Form One Admissions Open 2026</h4>
+              <p class="muted">Apply now for form one intake. Click read more to view application details and requirements.</p>
+              <div style="margin-top:12px">
+                <a class="btn" href="news-events.html">Read more</a>
+              </div>
+            </div>
+          </article>
+
+          <article class="card">
+            <img src="main-images/news2.jpg" alt="news 2">
+            <div class="body">
+              <span class="tag">Exam Notice</span>
+              <h4 style="margin:8px 0 10px 0">Mid-Term Exams Schedule</h4>
+              <p class="muted">Mid-term exams begin next week. Students should check the timetable and report promptly.</p>
+              <div style="margin-top:12px">
+                <a class="btn" href="news-events.html">Read more</a>
+              </div>
+            </div>
+          </article>
+
+          <article class="card">
+            <img src="main-images/news3.jpg" alt="news 3">
+            <div class="body">
+              <span class="tag">Event</span>
+              <h4 style="margin:8px 0 10px 0">Annual Sports Day</h4>
+              <p class="muted">Join us for an exciting day of athletics and house competitions — parents welcome.</p>
+              <div style="margin-top:12px">
+                <a class="btn" href="news-events.html">Read more</a>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+
+      <!-- RIGHT: Events sidebar -->
+      <aside class="events-sidebar" aria-labelledby="upcoming">
+        <h4 id="upcoming" style="margin-top:0">Upcoming Events</h4>
+
+        <div class="event-item">
+          <img src="main-images/event1.jpg" alt="event 1">
+          <div class="meta">
+            <strong>Sports Day</strong><br><span class="small">15 Feb 2026</span>
+          </div>
+        </div>
+
+        <div class="event-item">
+          <img src="main-images/event2.jpg" alt="event 2">
+          <div class="meta">
+            <strong>Drama Festival</strong><br><span class="small">10 Mar 2026</span>
+          </div>
+        </div>
+
+        <div class="event-item">
+          <img src="main-images/event3.jpg" alt="event 3">
+          <div class="meta">
+            <strong>Science Congress</strong><br><span class="small">25 Mar 2026</span>
+          </div>
+        </div>
+
+        <div style="margin-top:12px; text-align:center">
+          <a href="news-events.html" class="btn">View all events</a>
+        </div>
+      </aside>
     </div>
 
     <!-- SCHOOL INFO -->
-    <div class="info">
-        <h2>About the School</h2>
-        <p><b>School Name:</b> Olekasasi Mixed Day Secondary School</p>
-        <p><b>Location:</b> Ongata Rongai, Kenya</p>
+    <section style="margin-top:26px">
+      <h3>School Information</h3>
+      <div class="info-grid">
+        <div class="info-card">
+          <h4>Location</h4>
+          <p class="small">Ongata Rongai — Kware area, Nairobi County, Kenya</p>
+          <div style="margin-top:8px">
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3988.945..." width="100%" height="160" style="border:0;border-radius:8px" allowfullscreen="" loading="lazy"></iframe>
+          </div>
+        </div>
 
-        <h3>Social Media</h3>
-        <p>Facebook • Instagram • YouTube</p>
+        <div class="info-card">
+          <h4>Contact</h4>
+          <p class="small"><strong>Office:</strong> 0796 637 301</p>
+          <p class="small"><strong>Admissions:</strong> 07XX XXX XXX</p>
+          <p class="small"><strong>Email:</strong> muchiriericmuiruri@gmail.com</p>
+        </div>
 
-        <h3>Contacts</h3>
-        <p><b>Phone:</b> 07XX XXX XXX</p> 
-        <p><b>Email:</b> school@domain.com</p>
+        <div class="info-card">
+          <h4>Social</h4>
+          <p class="small">Facebook: Olekasasi Mixed Day Secondary School</p>
+          <p class="small">Instagram: @olekasasischool</p>
+          <p class="small">YouTube: Olekasasi Channel</p>
+        </div>
 
-        <h3>School Location Map</h3>
-        <iframe
-            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3988.945..."
-            width="100%" height="250" style="border:0;" allowfullscreen="">
-        </iframe>
-    </div>
+        <div class="info-card">
+          <h4>Vision & Mission</h4>
+          <p class="small"><strong>Vision:</strong> To be a leading secondary school recognized for academic excellence and holistic development.</p>
+          <p class="small" style="margin-top:8px"><strong>Mission:</strong> To provide quality education, nurture talents and instill moral values.</p>
+        </div>
+      </div>
+    </section>
 
     <!-- PARTNERS -->
-    <div class="partners">
-        <h2>Our Partners</h2>
-        <div class="logo-scroll">
-            <img src="main-images/logo1.jpg">
-            <img src="main-images/logo2.jpg">
-            <img src="main-images/logo3.jpg">
-            <img src="main-images/logo4.jpg">
-            <img src="main-images/logo5.jpg">
+    <section style="margin-top:26px">
+      <h3>Our Partners</h3>
+      <div class="partners-area">
+        <div class="partners-track" id="partnersTrack">
+          <!-- Duplicate logos so the animation looks continuous — you can add many -->
+          <img src="main-images/partner1.jpg" alt="partner 1">
+          <img src="main-images/partner2.jpg" alt="partner 2">
+          <img src="main-images/partner3.jpg" alt="partner 3">
+          <img src="main-images/partner4.jpg" alt="partner 4">
+          <img src="main-images/partner5.jpg" alt="partner 5">
+          <!-- repeat to make continuous scroll -->
+          <img src="main-images/partner1.jpg" alt="partner 1">
+          <img src="main-images/partner2.jpg" alt="partner 2">
+          <img src="main-images/partner3.jpg" alt="partner 3">
         </div>
-    </div>
+      </div>
+    </section>
 
-    <!-- FOOTER -->
-    <footer>
-        © 2025 Olekasasi Mixed Day Secondary School. All Rights Reserved.
-    </footer>
+  </main>
 
+  <footer>
+    © 2026 Olekasasi — Strive To Excel
+  </footer>
+
+  <script>
+    // SPLASH: hide and reveal main content (3s)
+    window.addEventListener('load', () => {
+      setTimeout(() => {
+        const s = document.getElementById('splash');
+        s.style.transition = 'opacity .6s ease';
+        s.style.opacity = '0';
+        setTimeout(()=>{ s.style.display = 'none'; document.getElementById('mainContent').style.display = 'block'; },650);
+      }, 1800); // slightly shorter splash
+    });
+
+    // HERO SLIDESHOW (manual small implementation)
+    (function(){
+      const slidesEl = document.getElementById('slides');
+      const slides = slidesEl.querySelectorAll('.slide');
+      const dots = document.querySelectorAll('.dot');
+      let idx = 0;
+
+      function go(i){
+        idx = i < 0 ? slides.length -1 : (i % slides.length);
+        slidesEl.style.transform = `translateX(-${idx * 100}%)`;
+        dots.forEach(d=>d.classList.remove('active'));
+        if(dots[idx]) dots[idx].classList.add('active');
+      }
+      // dots clickable
+      dots.forEach((dot, i)=> dot.addEventListener('click', ()=> go(i)));
+      // auto
+      setInterval(()=> go(idx+1), 4200);
+      // init
+      go(0);
+    })();
+
+    // Partners: pause on hover
+    (function(){
+      const track = document.getElementById('partnersTrack');
+      track.addEventListener('mouseenter', ()=> track.style.animationPlayState = 'paused');
+      track.addEventListener('mouseleave', ()=> track.style.animationPlayState = 'running');
+    })();
+
+    // Mobile nav toggle (if you later replace nav with mobile-friendly)
+    // function toggleNav(){
+    //   document.querySelector('.nav').classList.toggle('open');
+    // }
+  </script>
 </body>
 </html>
