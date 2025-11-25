@@ -12,13 +12,39 @@
       --white: #ffffff;
     }
 
-    body {
+    body, html {
       margin: 0;
       font-family: Arial, sans-serif;
       background: var(--white);
       color: var(--navy);
     }
 
+    /* SPLASH SCREEN */
+    #splash {
+      position: fixed;
+      top:0;
+      left:0;
+      width:100%;
+      height:100%;
+      background: linear-gradient(to bottom right, var(--navy), var(--maroon));
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      flex-direction: column;
+      z-index: 1000;
+      color:white;
+      text-align:center;
+    }
+
+    #splash img {
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-bottom: 20px;
+    }
+
+    /* HEADER */
     header {
       background: var(--navy);
       color: white;
@@ -81,6 +107,7 @@
     .main-nav .active {
       background: var(--maroon);
       border-radius: 5px;
+      color: white;
     }
 
     .nav-toggle {
@@ -92,7 +119,7 @@
       cursor: pointer;
     }
 
-    /* Hero slideshow */
+    /* HERO SLIDESHOW */
     .hero {
       position: relative;
       height: 400px;
@@ -125,188 +152,218 @@
       font-size: 28px;
     }
 
-    /* Info cards */
-    .info-section {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-around;
-      padding: 30px 10px;
-      background: #f5f5f5;
-    }
-
-    .info-card {
-      background: var(--white);
-      border-radius: 10px;
+    /* EVENTS */
+    .events-section {
       padding: 20px;
-      width: 280px;
-      margin: 10px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
       text-align: center;
     }
 
-    .info-card h3 {
+    .events-section button {
+      background: var(--maroon);
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+
+    .events-section button:hover {
+      background: var(--navy);
+    }
+
+    /* SCHOOL INFO */
+    .school-info {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-around;
+      padding: 20px;
+      gap: 20px;
+    }
+
+    .info-box {
+      flex: 1 1 250px;
+      background: #f5f5f5;
+      padding: 15px;
+      border-radius: 10px;
+    }
+
+    .info-box h3 {
       color: var(--maroon);
     }
 
-    .partners {
-      display: flex;
-      overflow-x: auto;
-      gap: 20px;
-      padding: 20px;
-      background: #eaeaea;
-      scroll-behavior: smooth;
+    /* MAP */
+    .map-container iframe {
+      width: 100%;
+      height: 250px;
+      border: 0;
+      border-radius: 10px;
     }
 
-    .partners img {
+    /* PARTNERS SCROLLING */
+    .partners-section {
+      background: var(--navy);
+      padding: 20px 0;
+      overflow: hidden;
+    }
+
+    .partners-container {
+      display: flex;
+      width: max-content;
+      animation: scrollPartners 20s linear infinite;
+      gap: 30px;
+    }
+
+    .partners-container img {
       width: 100px;
       height: 100px;
       border-radius: 50%;
       object-fit: cover;
     }
 
+    @keyframes scrollPartners {
+      0% { transform: translateX(100%); }
+      100% { transform: translateX(-100%); }
+    }
+
+    /* FOOTER */
     footer {
-      background: var(--navy);
+      background: var(--maroon);
       color: white;
       text-align: center;
-      padding: 15px 0;
+      padding: 10px;
     }
 
-    @media (max-width: 900px) {
-      .main-nav {
-        display: none;
-        background: var(--navy);
-        width: 100%;
-      }
-
-      .main-nav.open {
-        display: block;
-      }
-
-      .main-nav ul {
-        flex-direction: column;
-        padding: 10px 0;
-      }
-
-      .nav-toggle {
-        display: block;
-      }
-
-      .brand h1 {
-        font-size: 16px;
-      }
-
-      .hero-text h2 {
-        font-size: 22px;
-      }
-
-      .info-section {
-        flex-direction: column;
-        align-items: center;
-      }
+    /* RESPONSIVE */
+    @media(max-width:900px){
+      .nav-toggle { display: block; }
+      .main-nav { display:none; width:100%; }
+      .main-nav.open { display:block; }
+      .main-nav ul { flex-direction: column; padding: 10px 0; }
     }
+
+    @media(max-width:600px){
+      .school-logo { width:50px; height:50px; }
+      .hero-text h2 { font-size:22px; }
+      .partners-container img { width:80px; height:80px; }
+    }
+
   </style>
 </head>
 <body>
 
-<header>
-  <div class="header-inner">
-    <div class="brand">
-      <img src="main-images/school-logo.jpg" alt="Olekasasi Logo" class="school-logo">
-      <div>
-        <h1>Olekasasi Mixed Day Secondary School</h1>
-        <p class="motto">Strive To Excel</p>
+  <!-- SPLASH SCREEN -->
+  <div id="splash">
+    <img src="main-images/school-logo.jpg" alt="Olekasasi Logo">
+    <h1>Welcome to Olekasasi Mixed Day Secondary School</h1>
+    <p>Ongata Rongai, Kenya</p>
+  </div>
+
+  <!-- HEADER -->
+  <header>
+    <div class="header-inner">
+      <div class="brand">
+        <img src="main-images/school-logo.jpg" alt="Olekasasi Logo" class="school-logo">
+        <div>
+          <h1>Olekasasi Mixed Day Secondary School</h1>
+          <p class="motto">Strive To Excel</p>
+        </div>
+      </div>
+      <button class="nav-toggle" onclick="toggleNav()">☰</button>
+      <nav class="main-nav" id="mainNav">
+        <ul>
+          <li><a href="index.html" class="active">Home</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="academics.html">Academics</a></li>
+          <li><a href="clubs.html">Clubs</a></li>
+          <li><a href="gallery.html">Gallery</a></li>
+          <li><a href="staff.html">Staff</a></li>
+          <li><a href="news-events.html">News/Events</a></li>
+          <li><a href="admissions.html">Admissions</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- HERO SLIDESHOW -->
+  <section class="hero">
+    <div class="slideshow-container">
+      <div class="slide"><img src="main-images/img1.jpg" alt=""></div>
+      <div class="slide"><img src="main-images/img2.jpg" alt=""></div>
+      <div class="slide"><img src="main-images/img3.jpg" alt=""></div>
+    </div>
+    <div class="hero-text">
+      <h2>Welcome to Olekasasi Mixed Day Secondary School</h2>
+    </div>
+  </section>
+
+  <!-- EVENTS -->
+  <section class="events-section">
+    <h2>Upcoming Events</h2>
+    <button onclick="window.location.href='news-events.html'">View All Events</button>
+  </section>
+
+  <!-- SCHOOL INFO -->
+  <section class="school-info">
+    <div class="info-box">
+      <h3>Contact</h3>
+      <p>Phone: 079xxxxxxx</p>
+      <p>Email: example@gmail.com</p>
+    </div>
+    <div class="info-box">
+      <h3>Location</h3>
+      <p>Ongata Rongai, Kenya</p>
+      <div class="map-container">
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!..." allowfullscreen="" loading="lazy"></iframe>
       </div>
     </div>
-    <button class="nav-toggle" onclick="toggleNav()">☰</button>
-    <nav class="main-nav" id="mainNav">
-      <ul>
-        <li><a href="index.html" class="active">Home</a></li>
-        <li><a href="about.html">About</a></li>
-        <li><a href="academics.html">Academics</a></li>
-        <li><a href="clubs.html">Clubs</a></li>
-        <li><a href="gallery.html">Gallery</a></li>
-        <li><a href="staff.html">Staff</a></li>
-        <li><a href="news-events.html">News/Events</a></li>
-        <li><a href="admissions.html">Admissions</a></li>
-        <li><a href="contact.html">Contact</a></li>
-      </ul>
-    </nav>
-  </div>
-</header>
+    <div class="info-box">
+      <h3>Social Media</h3>
+      <p>Facebook: @olekasasi</p>
+      <p>Instagram: @olekasasi</p>
+      <p>Twitter: @olekasasi</p>
+    </div>
+  </section>
 
-<!-- Hero Slideshow -->
-<section class="hero">
-  <div class="slideshow-container">
-    <div class="slide"><img src="main-images/img1.jpg" alt="Slide 1"></div>
-    <div class="slide"><img src="main-images/img2.jpg" alt="Slide 2"></div>
-    <div class="slide"><img src="main-images/img3.jpg" alt="Slide 3"></div>
-  </div>
-  <div class="hero-text">
-    <h2>Welcome to Olekasasi Mixed Day Secondary School</h2>
-    <p>Ongata Rongai, Kenya</p>
-  </div>
-</section>
+  <!-- PARTNERS -->
+  <section class="partners-section">
+    <div class="partners-container">
+      <img src="main-images/partner1.jpg" alt="Partner 1">
+      <img src="main-images/partner2.jpg" alt="Partner 2">
+      <img src="main-images/partner3.jpg" alt="Partner 3">
+      <img src="main-images/partner4.jpg" alt="Partner 4">
+      <img src="main-images/partner5.jpg" alt="Partner 5">
+    </div>
+  </section>
 
-<!-- Information Section -->
-<section class="info-section">
-  <div class="info-card">
-    <h3>School Location</h3>
-    <p>Ongata Rongai, Kenya</p>
-    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15955.1234567890!2d36.8226!3d-1.3832!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x182f0faaa!2sOlekasasi%20Mixed%20Day%20Secondary%20School!5e0!3m2!1sen!2ske!4v1234567890" width="100%" height="200" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
-  </div>
+  <footer>
+    <p>© 2025 Olekasasi — Strive To Excel</p>
+  </footer>
 
-  <div class="info-card">
-    <h3>Contact</h3>
-    <p>Phone: ***********</p>
-    <p>Email: ***********</p>
-  </div>
+  <script>
+    // SPLASH SCREEN
+    window.addEventListener("load", () => {
+      setTimeout(() => {
+        document.getElementById("splash").style.display = "none";
+      }, 3000); // 3 seconds
+    });
 
-  <div class="info-card">
-    <h3>Follow Us</h3>
-    <p>Facebook: @olekasasi</p>
-    <p>Instagram: @olekasasi</p>
-    <p>Twitter: @olekasasi</p>
-  </div>
+    // HERO SLIDESHOW
+    let slideIndex = 0;
+    function showSlides() {
+      let slides = document.getElementsByClassName("slide");
+      for(let i=0;i<slides.length;i++) slides[i].style.display="none";
+      slideIndex++;
+      if(slideIndex>slides.length) slideIndex=1;
+      slides[slideIndex-1].style.display="block";
+      setTimeout(showSlides,4000);
+    }
+    showSlides();
 
-  <div class="info-card">
-    <h3>Upcoming Events</h3>
-    <a href="news-events.html" class="btn" style="background: var(--maroon); color:white; padding:10px 15px; border-radius:5px; text-decoration:none;">View Events</a>
-  </div>
-</section>
-
-<!-- Partners Section -->
-<section class="partners-section">
-  <h3 style="text-align:center; margin-top:20px;">Our Partners</h3>
-  <div class="partners">
-    <img src="main-images/partner1.jpg" alt="Partner 1">
-    <img src="main-images/partner2.jpg" alt="Partner 2">
-    <img src="main-images/partner3.jpg" alt="Partner 3">
-    <img src="main-images/partner4.jpg" alt="Partner 4">
-    <img src="main-images/partner5.jpg" alt="Partner 5">
-  </div>
-</section>
-
-<footer>
-  <p>© 2026 Olekasasi — Strive To Excel</p>
-</footer>
-
-<script>
-  /* Slideshow */
-  let slideIndex = 0;
-  function showSlides() {
-    let slides = document.getElementsByClassName("slide");
-    for (let i=0; i<slides.length; i++) slides[i].style.display = "none";
-    slideIndex++;
-    if(slideIndex > slides.length) slideIndex = 1;
-    slides[slideIndex-1].style.display = "block";
-    setTimeout(showSlides, 4000);
-  }
-  showSlides();
-
-  /* Mobile nav toggle */
-  function toggleNav() {
-    document.getElementById("mainNav").classList.toggle("open");
-  }
-</script>
+    // MOBILE NAV
+    function toggleNav() {
+      document.getElementById("mainNav").classList.toggle("open");
+    }
+  </script>
 </body>
 </html>
